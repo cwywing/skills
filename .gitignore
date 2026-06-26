@@ -1,0 +1,6 @@
+# Windows download metadata (WSL)
+*:Zone.Identifier
+
+# OS
+.DS_Store
+Thumbs.db
