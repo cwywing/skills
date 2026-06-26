@@ -25,8 +25,9 @@ PASS requires all:
 - Every step has exactly one owner (`code` / `llm` / `tool` / `human`).
 - No step is simultaneously (a) in a high-failure zone and (b) without any `human` checkpoint and without any deterministic `code`/`tool` guard.
 - Every must-hold constraint is routed to a **mechanism** (code, schema, validator, test, hook, permission), not left as prose to be obeyed by a future prompt.
+- Any persistent memory/context the agent inherits across runs has a stated **invalidation rule**: when does a stored note expire or get re-validated? A memory store with no invalidation rule is a slow-acting context-poison bug — it will compound yesterday's error into every future run. (If no persistent memory exists yet, mark N/A and move on.)
 
-FAIL signals: a critical decision left to the model with no verification; constraints living only inside prompt text; "the model will remember to…".
+FAIL signals: a critical decision left to the model with no verification; constraints living only inside prompt text; "the model will remember to…"; a CLAUDE.md / auto-memory / context cache that only ever *appends*, with no rule for what gets expired, re-checked, or deleted.
 
 > Load-bearing principle: a model *seeing* a rule is not the system *enforcing*
 > it. Soft, inheritable knowledge → context (a config doc the agent reads).
@@ -52,8 +53,9 @@ PASS requires all:
 - Success and failure are defined as observable checks, not impressions.
 - Eval cases are isolated from prompt/memory so they cannot be silently memorized (no data leakage).
 - Cases mirror the real environment closely enough to catch local-pass / production-fail skew.
+- Each case has a stated **budget** (cost and/or latency ceiling). Going over budget is *recorded as a failing signal*, not silently absorbed — long-chain agents usually die from cost/latency before they die from wrongness. A suite with no budget column hides the failure mode that ships in production. (Budgets may be rough; "≤ $0.05 / ≤ 30s per run" is fine. What matters is that the number exists and breaches are visible.)
 
-FAIL signals: "it failed once but I can't reproduce it"; eval that only reads the final answer; cases copied into the prompt; a suite that passes locally while the real environment behaves differently.
+FAIL signals: "it failed once but I can't reproduce it"; eval that only reads the final answer; cases copied into the prompt; a suite that passes locally while the real environment behaves differently; every run is "correct" but no one knows what it costs or how long it takes.
 
 ---
 

@@ -63,6 +63,15 @@ than leaving them blank.
 |------------|-------------------------|
 | <e.g. output must match schema> | <JSON schema validator in CI> |
 | <e.g. never write to prod without approval> | <permission gate / hook> |
+
+### Persistent memory / inherited context
+> Only fill in if the agent carries memory/context across runs (CLAUDE.md, auto-memory, a context cache, a DB of prior notes). If none, write N/A and skip.
+> Memory is a liability, not just an asset: a stale note is silent context poison.
+
+| What is stored | Why it helps future runs | Invalidation rule (when it expires / is re-validated / is deleted) |
+|----------------|--------------------------|--------------------------------------------------------------------|
+| <e.g. project layout + tool constraints> | <stops repeated re-discovery> | <re-checked when CI layout changes; otherwise stable> |
+| <e.g. a past failure fix> | <avoids repeating it> | <deleted if it conflicts with a newer passing run> |
 ```
 
 owner legend:
@@ -104,11 +113,14 @@ The deliverable is running code, not a doc. Confirm:
 input, trajectory/steps, tool calls, logs, state diff, cost/latency.>
 
 ## Cases
-| id | input | expected outcome | check type | mirrors prod? |
-|----|-------|------------------|------------|---------------|
-| c1 | <input> | <expected> | deterministic test | yes |
-| c2 | <input> | <expected> | state check | yes |
-| c3 | <edge/failure input> | <graceful handling> | transcript review | yes |
+| id | input | expected outcome | check type | budget (cost/latency) | mirrors prod? |
+|----|-------|------------------|------------|-----------------------|---------------|
+| c1 | <input> | <expected> | deterministic test | <e.g. ≤ $0.02 / ≤ 10s> | yes |
+| c2 | <input> | <expected> | state check | <e.g. ≤ $0.05 / ≤ 30s> | yes |
+| c3 | <edge/failure input> | <graceful handling> | transcript review | <e.g. ≤ $0.10 / ≤ 60s> | yes |
+
+> Budgets are rough ceilings, not SLAs. A breach is a *failing signal to investigate*,
+> not an automatic test failure — record it, do not silently absorb it.
 
 ## Leakage guard
 <Note how cases are kept out of the prompt/memory so they are not memorized.>

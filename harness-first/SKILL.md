@@ -108,6 +108,7 @@ the loop.
 **🚪 Gate 2 — Boundaries safe?**
 - Does any step sit in a high-failure zone with *no* `human` checkpoint and *no* deterministic `code`/`tool` guard? That is a time bomb — add a guard or a checkpoint.
 - Are the must-hold constraints routed to *mechanism* (code/schema/validator/test), not left as prose hopes in a future prompt?
+- If the agent inherits any persistent memory/context across runs: does it have an **invalidation rule** (when a stored note expires or gets re-validated)? Append-only memory with no expiry compounds yesterday's error into every future run. N/A if no persistent memory yet.
 
 ## Phase 2 — Minimum runnable link
 
@@ -139,6 +140,7 @@ answer.
 **🚪 Gate 4 — Failure reproducible?**
 - Can a failure be reproduced on demand? A non-reproducible eval is no eval.
 - Are the eval cases isolated from the prompt/memory so they cannot be silently "memorized" (leakage)? Beware local-pass / production-fail skew — favor cases that mirror the real environment.
+- Does each case have a **cost/latency budget**, with breaches recorded as a failing signal? Long-chain agents usually die from cost before they die from wrongness. Rough numbers ("≤ $0.05 / ≤ 30s") are fine; what matters is the number exists and overspends are visible, not silently absorbed.
 
 ## Phase 4 — Maker-Checker loop
 
@@ -152,6 +154,23 @@ do **not** blame the model — fix the harness: stale docs, an unclear constrain
 in the config, a wrong Checker standard, a tool that cannot return ground truth.
 Each new component you add (sub-agent, tool, memory layer, workflow branch) must
 still earn its place via a real failure — the Phase 2 rule never expires.
+
+**When the same failure persists across 2–3 retries, stop and run the attribution
+triage before touching the harness again.** A retry that does not first ask
+"is this my harness or the agent this round?" is how you waste a day tuning the
+wrong thing. Walk this list top-down — the first row that fits is the most likely
+root cause, fix that one thing, then resume:
+
+| Signal you are seeing | Likely root cause | Fix *this*, not the model |
+|-----------------------|-------------------|---------------------------|
+| Failure message is concrete and stable across retries (same error, same place) | **Harness** — I/O contract, schema, test, or tool return is wrong | Fix the contract / test / tool; do not retry the agent |
+| Failure drifts each retry (different error, different step) | **Agent variance** — not yet converged | Re-run once or twice; if it still drifts, tighten the task spec or shrink the step |
+| Agent "succeeds" but the Checker catches nothing, or there is no Checker | **Harness** — missing ground truth | Add / fix the Checker before any more Maker runs |
+| Agent keeps hitting a step that has no deterministic guard | **Harness** — under-decomposed (Gate 1/2 debt) | Go back and split the step; do not paper over it in prompt |
+| Only this one case fails; siblings pass | Could be either — re-run that case 2× first | If it reproduces: harness. If it flaps: agent variance; add to eval as a flake case |
+
+This triage is a **diagnostic, not a gate** — it never blocks progress on its own.
+It exists so that when you *do* stop, you stop for the right reason.
 
 When a workflow stabilizes and repeats across projects, capture it as a skill using
 `../skill-authoring/` — apply the craft layer while drafting, then hand off to
@@ -203,6 +222,7 @@ Failure-prone step: #4 (model promises something policy forbids).
 - [ ] `docs/reality.md` exists; deterministic vs fuzzy steps separated; failure zone named (Gate 1).
 - [ ] Boundary table assigns `code`/`llm`/`tool`/`human` to every step; no unguarded high-failure step (Gate 2).
 - [ ] Must-hold constraints live in mechanism (code/schema/validator/test), not prompt prose.
+- [ ] Persistent memory (if any) has an invalidation rule; no append-only context poison (Gate 2).
 - [ ] Minimum link runs end-to-end with one green check; no unearned components (Gate 3).
-- [ ] `eval/cases.md` defines success, failure, and what to record; failures reproducible; no leakage (Gate 4).
-- [ ] Maker-Checker loop wired before bulk feature work begins.
+- [ ] `eval/cases.md` defines success, failure, and what to record; failures reproducible; no leakage; each case has a cost/latency budget with breaches recorded (Gate 4).
+- [ ] Maker-Checker loop wired before bulk feature work begins; attribution triage used when a failure persists 2–3 retries (Phase 4).
