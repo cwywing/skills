@@ -11,9 +11,11 @@ self-contained folder you can copy into a project's skill directory.
 |-------|-------------|
 | [harness-first](harness-first/) | Starting a **new** project — build a self-verifying harness before writing feature code or prompts |
 | [skill-authoring](skill-authoring/) | Writing, reviewing, or improving any SKILL.md to production quality |
+| [geo-article-generator](geo-article-generator/) | Turning supplied source materials into a publishable article that generative AI engines can identify, understand, and cite |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
-**skill-authoring** once the harness is running.
+**skill-authoring** once the harness is running. Use **geo-article-generator**
+whenever content needs to be legible to generative AI search, not just human readers.
 
 ## Install
 
@@ -21,12 +23,14 @@ Copy the skill folder into your project's skill directory:
 
 ```bash
 # Cursor
-cp -r harness-first   /path/to/project/.cursor/skills/harness-first
-cp -r skill-authoring /path/to/project/.cursor/skills/skill-authoring
+cp -r harness-first          /path/to/project/.cursor/skills/harness-first
+cp -r skill-authoring        /path/to/project/.cursor/skills/skill-authoring
+cp -r geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
 
 # Claude Code
-cp -r harness-first   /path/to/project/.claude/skills/harness-first
-cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
+cp -r harness-first          /path/to/project/.claude/skills/harness-first
+cp -r skill-authoring        /path/to/project/.claude/skills/skill-authoring
+cp -r geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
 ```
 
 Both tools auto-discover skills. No extra configuration needed.
@@ -49,6 +53,13 @@ Both tools auto-discover skills. No extra configuration needed.
     - [prose-and-formatting.md](skill-authoring/references/prose-and-formatting.md)
     - [instruction-design.md](skill-authoring/references/instruction-design.md)
     - [examples-and-output-formats.md](skill-authoring/references/examples-and-output-formats.md)
+- [geo-article-generator/](geo-article-generator/) — turn source materials into generative-AI-legible articles
+  - [SKILL.md](geo-article-generator/SKILL.md) — main workflow (start here)
+  - [README.md](geo-article-generator/README.md) / [README.zh-CN.md](geo-article-generator/README.zh-CN.md)
+  - [references/](geo-article-generator/references/) — GEO principles, article template, self-check gate
+    - [geo-principles.md](geo-article-generator/references/geo-principles.md)
+    - [article-template.md](geo-article-generator/references/article-template.md)
+    - [self-check.md](geo-article-generator/references/self-check.md)
 
 Optional subdirectories (`scripts/`, `assets/`) are created per-skill when needed —
 not every skill requires them.

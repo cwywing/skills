@@ -10,8 +10,9 @@
 |------|----------|
 | [harness-first](harness-first/) | **新项目**启动 — 在写功能代码或 prompt 之前，先搭建自验证执行 harness |
 | [skill-authoring](skill-authoring/) | 撰写、审查或改进任意 SKILL.md，达到生产级质量 |
+| [geo-article-generator](geo-article-generator/) | 把提供的素材资料落地成一篇可被生成式 AI 引擎识别、理解并引用的文章 |
 
-两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。
+两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。
 
 ## 安装
 
@@ -19,12 +20,14 @@
 
 ```bash
 # Cursor
-cp -r harness-first   /path/to/project/.cursor/skills/harness-first
-cp -r skill-authoring /path/to/project/.cursor/skills/skill-authoring
+cp -r harness-first          /path/to/project/.cursor/skills/harness-first
+cp -r skill-authoring        /path/to/project/.cursor/skills/skill-authoring
+cp -r geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
 
 # Claude Code
-cp -r harness-first   /path/to/project/.claude/skills/harness-first
-cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
+cp -r harness-first          /path/to/project/.claude/skills/harness-first
+cp -r skill-authoring        /path/to/project/.claude/skills/skill-authoring
+cp -r geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
 ```
 
 两个工具均会自动发现技能，无需额外配置。
@@ -47,6 +50,13 @@ cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
     - [prose-and-formatting.md](skill-authoring/references/prose-and-formatting.md)
     - [instruction-design.md](skill-authoring/references/instruction-design.md)
     - [examples-and-output-formats.md](skill-authoring/references/examples-and-output-formats.md)
+- [geo-article-generator/](geo-article-generator/) — 把素材落地成对生成式 AI 可读的文章
+  - [SKILL.md](geo-article-generator/SKILL.md) — 主工作流（从这里开始）
+  - [README.md](geo-article-generator/README.md) / [README.zh-CN.md](geo-article-generator/README.zh-CN.md)
+  - [references/](geo-article-generator/references/) — GEO 原则、文章模板、自检闸门
+    - [geo-principles.md](geo-article-generator/references/geo-principles.md)
+    - [article-template.md](geo-article-generator/references/article-template.md)
+    - [self-check.md](geo-article-generator/references/self-check.md)
 
 按需创建 `scripts/`、`assets/` 子目录即可，并非每个技能都需要。
 
