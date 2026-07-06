@@ -10,10 +10,10 @@ loop (skill-creator).
 
 ```bash
 # Cursor
-cp -r skill-authoring /path/to/project/.cursor/skills/skill-authoring
+cp -r skills/skill-authoring /path/to/project/.cursor/skills/skill-authoring
 
 # Claude Code
-cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
+cp -r skills/skill-authoring /path/to/project/.claude/skills/skill-authoring
 ```
 
 Trigger it by saying "write a skill", "improve my SKILL.md", "why isn't my skill
@@ -42,5 +42,5 @@ templates — this meta-skill does not require them.
 ## Provenance
 
 Patterns trace to the Claude Fable 5 system prompt
-([`../CLAUDE-FABLE-5/README.md`](../CLAUDE-FABLE-5/README.md)) and official
+([`../../CLAUDE-FABLE-5/README.md`](../../CLAUDE-FABLE-5/README.md)) and official
 skill-creator / skill-development guidance.

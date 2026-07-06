@@ -13,7 +13,8 @@ description: >-
   architecture or eval, because the right first move in any new project is building
   the harness, not the prompt or the code. Do not use it for changes to an existing
   codebase (a bug fix, one feature, a refactor, a review) — kickoff only.
-version: 0.1.0
+metadata:
+  version: "0.1.0"
 ---
 
 # Harness-First Project Bootstrap

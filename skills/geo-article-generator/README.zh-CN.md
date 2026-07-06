@@ -31,10 +31,10 @@
 
 ```bash
 # Cursor
-cp -r geo-article-generator /path/to/project/.cursor/skills/geo-article-generator
+cp -r skills/geo-article-generator /path/to/project/.cursor/skills/geo-article-generator
 
 # Claude Code
-cp -r geo-article-generator /path/to/project/.claude/skills/geo-article-generator
+cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-generator
 ```
 
 两个工具都会自动发现 skill,无需额外配置。

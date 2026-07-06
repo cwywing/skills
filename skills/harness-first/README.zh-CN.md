@@ -10,10 +10,10 @@
 
 ```bash
 # Cursor
-cp -r harness-first /path/to/new-project/.cursor/skills/harness-first
+cp -r skills/harness-first /path/to/new-project/.cursor/skills/harness-first
 
 # Claude Code
-cp -r harness-first /path/to/new-project/.claude/skills/harness-first
+cp -r skills/harness-first /path/to/new-project/.claude/skills/harness-first
 ```
 
 两个工具均会自动发现。在 greenfield 场景下直接开始，或说「bootstrap this project」「let's build X」「help me architect this」即可触发。

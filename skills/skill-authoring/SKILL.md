@@ -1,12 +1,13 @@
 ---
 name: skill-authoring
 description: This skill should be used whenever authoring, drafting, structuring, reviewing, or improving a Claude skill (a SKILL.md and its bundled resources) and the goal is production-grade quality. Trigger it when the user says things like "write a skill", "create a skill for X", "make a SKILL.md", "turn this workflow into a skill", "improve/review my skill", or "why isn't my skill triggering", or when about to hand a skill to skill-creator. It supplies distilled house-style patterns — description/triggering, prose, instruction design, and examples — drawn from a production system prompt and layered on top of the official skill spec. Use it even when the user only says "make a skill for X" without mentioning quality, since a well-crafted skill is always the goal.
-version: 0.1.0
+metadata:
+  version: "0.1.0"
 ---
 
 # Skill Authoring
 
-This skill captures *how to write a skill well* — the craft layer, distilled from a production-grade system prompt (the Claude Fable 5 prompt in `../CLAUDE-FABLE-5/README.md`) and reconciled with the official skill spec. Apply it while drafting any SKILL.md so the result reads like a production system prompt rather than a rough draft.
+This skill captures *how to write a skill well* — the craft layer, distilled from a production-grade system prompt (the Claude Fable 5 prompt in `../../CLAUDE-FABLE-5/README.md`) and reconciled with the official skill spec. Apply it while drafting any SKILL.md so the result reads like a production system prompt rather than a rough draft.
 
 ## What this adds, and how it relates to skill-creator
 
@@ -44,7 +45,7 @@ Read the relevant file when you reach that part of drafting:
 - **`references/instruction-design.md`** — making instructions a model actually follows: why-over-MUST, effort calibration, decision tables, self-checks, and knowledge placement.
 - **`references/examples-and-output-formats.md`** — few-shot examples, contrast pairs, and pinning exact output formats.
 
-Each file records its provenance in the Fable 5 system prompt (`../CLAUDE-FABLE-5/README.md`) and the official skill skills, so any pattern traces back to a source.
+Each file records its provenance in the Fable 5 system prompt (`../../CLAUDE-FABLE-5/README.md`) and the official skill skills, so any pattern traces back to a source.
 
 For a complete skill that follows every pattern here, see `../harness-first/SKILL.md` in this repo.
 

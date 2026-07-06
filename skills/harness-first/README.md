@@ -12,10 +12,10 @@ Copy this whole folder into the new project's skill directory:
 
 ```bash
 # Cursor
-cp -r harness-first /path/to/new-project/.cursor/skills/harness-first
+cp -r skills/harness-first /path/to/new-project/.cursor/skills/harness-first
 
 # Claude Code
-cp -r harness-first /path/to/new-project/.claude/skills/harness-first
+cp -r skills/harness-first /path/to/new-project/.claude/skills/harness-first
 ```
 
 Both tools auto-discover it. Trigger it by starting greenfield work, or by saying

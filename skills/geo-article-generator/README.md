@@ -39,10 +39,10 @@ Copy this folder into the project's skill directory:
 
 ```bash
 # Cursor
-cp -r geo-article-generator /path/to/project/.cursor/skills/geo-article-generator
+cp -r skills/geo-article-generator /path/to/project/.cursor/skills/geo-article-generator
 
 # Claude Code
-cp -r geo-article-generator /path/to/project/.claude/skills/geo-article-generator
+cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-generator
 ```
 
 Both tools auto-discover skills. No extra configuration needed.

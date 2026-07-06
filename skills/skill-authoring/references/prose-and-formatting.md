@@ -1,6 +1,6 @@
 # Prose & formatting discipline
 
-Provenance: Fable 5 system prompt — `tone_and_formatting` and `lists_and_bullets`, plus the response rules in `search_usage_guidelines` (`../../CLAUDE-FABLE-5/README.md`); official `skill-development` ("Writing Style Requirements").
+Provenance: Fable 5 system prompt — `tone_and_formatting` and `lists_and_bullets`, plus the response rules in `search_usage_guidelines` (`../../../CLAUDE-FABLE-5/README.md`); official `skill-development` ("Writing Style Requirements").
 
 ## Voice: imperative, not "you"
 

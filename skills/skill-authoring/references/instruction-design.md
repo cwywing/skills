@@ -1,6 +1,6 @@
 # Designing instructions a model will actually follow
 
-Provenance: Fable 5 system prompt — `core_search_behaviors` item 2 (scale to complexity), `artifact_usage_criteria` (USE / DO NOT USE lists), and the copyright "Self-check before responding" block (`../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Improving the skill") and `skill-development` (progressive disclosure).
+Provenance: Fable 5 system prompt — `core_search_behaviors` item 2 (scale to complexity), `artifact_usage_criteria` (USE / DO NOT USE lists), and the copyright "Self-check before responding" block (`../../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Improving the skill") and `skill-development` (progressive disclosure).
 
 ## Knowledge goes in references/, not the body
 

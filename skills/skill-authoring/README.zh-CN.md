@@ -8,10 +8,10 @@
 
 ```bash
 # Cursor
-cp -r skill-authoring /path/to/project/.cursor/skills/skill-authoring
+cp -r skills/skill-authoring /path/to/project/.cursor/skills/skill-authoring
 
 # Claude Code
-cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
+cp -r skills/skill-authoring /path/to/project/.claude/skills/skill-authoring
 ```
 
 在说「write a skill」「improve my SKILL.md」「why isn't my skill triggering」，或即将把草稿交给 skill-creator 时触发。
@@ -37,5 +37,5 @@ cp -r skill-authoring /path/to/project/.claude/skills/skill-authoring
 ## 溯源
 
 模式溯源至 Claude Fable 5 系统提示词
-（[`../CLAUDE-FABLE-5/README.md`](../CLAUDE-FABLE-5/README.md)）及官方
+（[`../../CLAUDE-FABLE-5/README.md`](../../CLAUDE-FABLE-5/README.md)）及官方
 skill-creator / skill-development 指南。

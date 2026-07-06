@@ -12,7 +12,8 @@ description: >-
   without mentioning GEO — a generative-engine-friendly structure is always the goal.
   Do not use it for pure copywriting, ad headlines, or content whose only channel is
   a paid ad (no organic/AI discovery intent) — those optimize for click, not citation.
-version: 0.1.0
+metadata:
+  version: "0.1.0"
 ---
 
 # GEO Article Generator

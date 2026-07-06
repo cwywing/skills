@@ -1,6 +1,6 @@
 # Writing the description (the trigger)
 
-Provenance: Fable 5 system prompt — the `ask_user_input_v0` tool description under "Tool Definitions" (`../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Write the SKILL.md" and "Description Optimization"); official `skill-development` ("Metadata Quality").
+Provenance: Fable 5 system prompt — the `ask_user_input_v0` tool description under "Tool Definitions" (`../../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Write the SKILL.md" and "Description Optimization"); official `skill-development` ("Metadata Quality").
 
 ## Why this is the highest-leverage text in the skill
 

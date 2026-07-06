@@ -1,6 +1,6 @@
 # Examples & output formats
 
-Provenance: Fable 5 system prompt — `citation_instructions` (Correct/Incorrect pairs), the copyright `Example`/`Rationale` blocks, and `artifact_usage_criteria` ("EXAMPLE DECISIONS") (`../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Examples pattern" and "Defining output formats").
+Provenance: Fable 5 system prompt — `citation_instructions` (Correct/Incorrect pairs), the copyright `Example`/`Rationale` blocks, and `artifact_usage_criteria` ("EXAMPLE DECISIONS") (`../../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Examples pattern" and "Defining output formats").
 
 ## Show Input → Output
 
