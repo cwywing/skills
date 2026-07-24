@@ -1,0 +1,24 @@
+# Optional: pre-split tasks (skip Plan or use alongside MD)
+
+- id: HEALTH_001
+  description: "Implement GET /health returning {\"ok\": true}"
+  acceptance:
+    - "Health route exists in the project web stack"
+    - "Response body includes ok: true"
+  category: feature
+  complexity: simple
+  stages:
+    plan: { status: skipped }
+    dev: { status: pending }
+    verify: { status: pending }
+
+- id: HEALTH_002
+  description: "Document how to call GET /health"
+  acceptance:
+    - "README or API docs mention GET /health"
+  category: docs
+  complexity: simple
+  stages:
+    plan: { status: skipped }
+    dev: { status: pending }
+    verify: { status: pending }

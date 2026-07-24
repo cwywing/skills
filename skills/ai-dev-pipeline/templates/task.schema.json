@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "PipelineTask",
+  "type": "object",
+  "required": ["id", "description", "acceptance"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+    "acceptance": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "category": { "type": "string" },
+    "complexity": { "type": "string", "enum": ["simple", "medium", "complex"] },
+    "order": { "type": "number", "description": "Lower runs first; required for multi-task plans" },
+    "depends_on": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "source": { "type": "string" },
+    "verify_command": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "stages": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["pending", "done", "failed", "skipped"]
+          },
+          "completed_at": { "type": ["string", "null"] },
+          "attempts": { "type": "integer" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

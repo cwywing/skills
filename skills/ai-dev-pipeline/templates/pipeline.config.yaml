@@ -1,0 +1,57 @@
+agent:
+  bin: agent
+  # 默认优先用 cursor-grok-4.5-high；可按需改为 composer-2.5 / glm-5.2-max / kimi-k2.7-code / auto
+  args: ["-p", "--force", "--output-format", "json", "--model", "cursor-grok-4.5-high"]
+  cwd: .
+  timeout_sec: 1800
+
+stages:
+  - id: plan
+    enabled: true
+    prompt: prompts/plan.md
+  - id: dev
+    enabled: true
+    prompt: prompts/dev.md
+  - id: verify
+    enabled: true
+    prompt: prompts/verify.md
+    run: []
+  # Optional stages (uncomment / add as needed):
+  # - id: review
+  #   enabled: true
+  #   prompt: prompts/review.md
+  # - id: deploy
+  #   enabled: false
+  #   prompt: prompts/deploy.md
+  #   run: []
+
+delivery:
+  mode: commit          # commit | pr | none
+  branch_prefix: pipeline/
+  commit_message: "pipeline({task_id}): {summary}"
+
+retry:
+  max_per_stage: 2
+
+stop_on_task_failure: false
+
+# Round memory + adapt later pending tasks (conservative defaults)
+memory:
+  enabled: true
+  dir: .pipeline/memory
+  recent_n: 5
+  max_inject_chars: 1200
+  use_agent: false                 # set true to refine gaps via agent
+  use_agent_only_on_fail: true     # when use_agent=true, only refine on FAIL
+
+adapt:
+  mode: suggest            # off | suggest | apply  (apply = auto-patch pending; use carefully)
+  dir: .pipeline/adaptations
+  allow_fields: [acceptance, description, verify_command]
+  forbid_touch_buckets: [done, failed, active]
+  max_pending_patches_per_round: 3
+  require_gap_tags: true
+
+plans_dir: .pipeline/plans
+tasks_dir: .pipeline/tasks
+logs_dir: .pipeline/logs

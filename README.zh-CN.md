@@ -11,8 +11,9 @@
 | [harness-first](skills/harness-first/) | **新项目**启动 — 在写功能代码或 prompt 之前，先搭建自验证执行 harness |
 | [skill-authoring](skills/skill-authoring/) | 撰写、审查或改进任意 SKILL.md，达到生产级质量 |
 | [geo-article-generator](skills/geo-article-generator/) | 把提供的素材资料落地成一篇可被生成式 AI 引擎识别、理解并引用的文章 |
+| [ai-dev-pipeline](skills/ai-dev-pipeline/) | 把计划拆成有序任务，用 Cursor Agent CLI（`agent -p --force`）持续交付 |
 
-两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。
+两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent 啃完）时，用 **ai-dev-pipeline**。
 
 ## 安装
 
@@ -31,11 +32,20 @@ Cursor 会将其复制到 `.cursor/skills/` 并自动发现。
 cp -r skills/harness-first          /path/to/project/.cursor/skills/harness-first
 cp -r skills/skill-authoring        /path/to/project/.cursor/skills/skill-authoring
 cp -r skills/geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
+cp -r skills/ai-dev-pipeline        /path/to/project/.cursor/skills/ai-dev-pipeline
 
 # Claude Code
 cp -r skills/harness-first          /path/to/project/.claude/skills/harness-first
 cp -r skills/skill-authoring        /path/to/project/.claude/skills/skill-authoring
 cp -r skills/geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
+cp -r skills/ai-dev-pipeline        /path/to/project/.claude/skills/ai-dev-pipeline
+```
+
+**ai-dev-pipeline** 仅复制会装上 Skill 文档；若还要把可运行的 `.pipeline/` 装进项目：
+
+```bash
+pip install -r skills/ai-dev-pipeline/requirements.txt
+python skills/ai-dev-pipeline/scripts/install.py --target /path/to/your-project
 ```
 
 两个工具均会自动发现技能，无需额外配置。
@@ -48,7 +58,8 @@ skills/                          # 仓库根目录
 └── skills/                      # 技能集合（GitHub 导入所需）
     ├── harness-first/
     ├── skill-authoring/
-    └── geo-article-generator/
+    ├── geo-article-generator/
+    └── ai-dev-pipeline/
 ```
 
 - [harness-first/](skills/harness-first/) — 五阶段门控式项目启动
@@ -60,6 +71,11 @@ skills/                          # 仓库根目录
 - [geo-article-generator/](skills/geo-article-generator/) — 对生成式 AI 可读的文章
   - [SKILL.md](skills/geo-article-generator/SKILL.md) — 主工作流（从这里开始）
   - [references/](skills/geo-article-generator/references/) — GEO 原则、文章模板、自检闸门
+- [ai-dev-pipeline/](skills/ai-dev-pipeline/) — Cursor Agent CLI 多任务持续交付流水线
+  - [SKILL.md](skills/ai-dev-pipeline/SKILL.md) — 主工作流（从这里开始）
+  - [scripts/](skills/ai-dev-pipeline/scripts/) — install + run_pipeline 运行时
+  - [templates/](skills/ai-dev-pipeline/templates/) — 配置与阶段 prompts
+  - [references/](skills/ai-dev-pipeline/references/) — 运维手册、后端安全
 
 按需创建 `scripts/`、`assets/` 子目录即可，并非每个技能都需要。
 
