@@ -1,0 +1,18 @@
+{
+  "说明": "【DEMO 示意】PHP MVC 商城二开；路径为风格示意，勿照抄提交。",
+  "生成时间": "YYYY-MM-DD",
+  "审查记录": [
+    "第1次：淘汰空壳结算 Controller 与同构 list 模板",
+    "第2次：覆盖报价转单、库存扣补、折扣取优、支付回调",
+    "第3次：估页 80～100；后端占比>40%"
+  ],
+  "前端文件": [
+    {"分类": "快速结算页", "路径": "catalog/view/theme/default/template/checkout/cart.twig"}
+  ],
+  "后端文件": [
+    {"分类": "结算基类-转单与库存", "路径": "catalog/model/checkout/base.php"},
+    {"分类": "订单模型-库存扣补", "路径": "catalog/model/checkout/order.php"},
+    {"分类": "折扣模型-取优计价", "路径": "admin/model/catalog/discount.php"},
+    {"分类": "支付回调", "路径": "catalog/controller/extension/payment/wxpay.php"}
+  ]
+}

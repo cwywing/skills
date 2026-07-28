@@ -1,0 +1,17 @@
+{
+  "说明": "示例格式。路径与分类须改为当前仓库真实相对路径；勿照抄本示例栈。",
+  "生成时间": "YYYY-MM-DD",
+  "审查记录": [
+    "第1次：…",
+    "第2次：…",
+    "第3次：…"
+  ],
+  "前端文件": [
+    {"分类": "核心业务页", "路径": "pages/order/confirm.vue"}
+  ],
+  "后端文件": [
+    {"分类": "订单领域服务", "路径": "app/Services/OrderService.php"},
+    {"分类": "订单模型", "路径": "app/Models/Order.php"},
+    {"分类": "订单接口入口", "路径": "app/Http/Controllers/OrderController.php"}
+  ]
+}

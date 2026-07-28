@@ -1,0 +1,7 @@
+python-docx>=0.8.11
+markdown>=3.3
+beautifulsoup4>=4.9
+# PDF 截取（export_identification_pdf.py）
+PyMuPDF>=1.23.0
+# Word→PDF 另需本机 Microsoft Word + pywin32（Windows）
+# pywin32>=306

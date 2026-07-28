@@ -1,0 +1,17 @@
+{
+  "说明": "【DEMO 示意】Spring+Vue；路径非真实仓库，勿照抄提交。",
+  "生成时间": "YYYY-MM-DD",
+  "审查记录": [
+    "第1次：去掉纯 CRUD Repository 包装",
+    "第2次：覆盖审批流转与额度扣减",
+    "第3次：估页与后端占比达标"
+  ],
+  "前端文件": [
+    {"分类": "审批提交页", "路径": "src/views/approval/SubmitView.vue"}
+  ],
+  "后端文件": [
+    {"分类": "审批领域服务", "路径": "src/main/java/com/example/service/ApprovalService.java"},
+    {"分类": "额度扣减服务", "路径": "src/main/java/com/example/service/QuotaService.java"},
+    {"分类": "审批接口", "路径": "src/main/java/com/example/web/ApprovalController.java"}
+  ]
+}

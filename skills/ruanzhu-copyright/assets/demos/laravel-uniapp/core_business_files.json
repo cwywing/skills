@@ -1,0 +1,19 @@
+{
+  "说明": "【DEMO 示意】Laravel+UniApp；路径非真实仓库，勿照抄提交。",
+  "生成时间": "YYYY-MM-DD",
+  "审查记录": [
+    "第1次：去掉同构 CRUD 列表控制器",
+    "第2次：覆盖下单计价与支付回调幂等",
+    "第3次：体量估页落入 80～100；后端占比≥40%"
+  ],
+  "前端文件": [
+    {"分类": "结算确认页", "路径": "pages/order/confirm.vue"},
+    {"分类": "支付组件", "路径": "components/payment/pay-panel.vue"}
+  ],
+  "后端文件": [
+    {"分类": "订单计价服务", "路径": "app/Services/Order/PricingService.php"},
+    {"分类": "支付回调处理", "路径": "app/Http/Controllers/Pay/NotifyController.php"},
+    {"分类": "订单模型", "路径": "app/Models/Order.php"},
+    {"分类": "订单路由", "路径": "routes/api/order.php"}
+  ]
+}

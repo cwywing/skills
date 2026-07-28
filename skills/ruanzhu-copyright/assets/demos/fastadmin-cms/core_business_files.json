@@ -1,0 +1,23 @@
+{
+  "说明": "【DEMO 示意】FastAdmin+CMS 二开选码风格；路径为常见布局示意，勿照抄提交。已排除框架核心与插件原生 API/UniApp。",
+  "生成时间": "YYYY-MM-DD",
+  "审查记录": [
+    "第1次：剔除 uniapp 原生页、api/wxapp 控制器、同构 list_*.html 与后台标准 CRUD 大页",
+    "第2次：覆盖场景方案、表单邮件分发、订单结算、栏目/文章权限改造、Python 工具、少量 PC 定制模板",
+    "第3次：估有效源码约 5000～6500 行；前端文件为空；以 export 实测程序 PDF 落在 80～100 页后再定稿"
+  ],
+  "前端文件": [],
+  "后端文件": [
+    {"分类": "CMS文章模型", "路径": "addons/cms/model/Archives.php"},
+    {"分类": "CMS栏目模型", "路径": "addons/cms/model/Channel.php"},
+    {"分类": "CMS自定义表单控制器", "路径": "addons/cms/controller/Diyform.php"},
+    {"分类": "CMS场景控制器", "路径": "addons/cms/controller/Scene.php"},
+    {"分类": "CMS核心服务", "路径": "addons/cms/library/Service.php"},
+    {"分类": "CMS订单服务", "路径": "addons/cms/library/Order.php"},
+    {"分类": "后台场景控制器", "路径": "application/admin/controller/cms/Scene.php"},
+    {"分类": "前台文档投稿控制器", "路径": "application/index/controller/cms/Archives.php"},
+    {"分类": "文章采集工具", "路径": "python/article.py"},
+    {"分类": "PC场景详情模板", "路径": "addons/cms/view/default/show_scene.html"},
+    {"分类": "PC培训报名表单模板", "路径": "addons/cms/view/default/diyform_pxbm.html"}
+  ]
+}
