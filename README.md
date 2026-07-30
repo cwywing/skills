@@ -14,12 +14,15 @@ or import via Cursor's **Remote Rule (GitHub)**.
 | [skill-authoring](skills/skill-authoring/) | Writing, reviewing, or improving any SKILL.md to production quality |
 | [geo-article-generator](skills/geo-article-generator/) | Turning supplied source materials into a publishable article that generative AI engines can identify, understand, and cite |
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | Splitting a plan into ordered tasks and continuously delivering via Cursor Agent CLI (`agent -p --force`) |
+| [admin-console-ux](skills/admin-console-ux/) | Polishing admin / 管理后台 UX so display and interaction match mid-console **ops habits** |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
 **skill-authoring** once the harness is running. Use **geo-article-generator**
 whenever content needs to be legible to generative AI search, not just human readers.
 Use **ai-dev-pipeline** when a PRD or plan should become a multi-task CLI delivery
-loop instead of one giant agent run.
+loop instead of one giant agent run. Use **admin-console-ux** when an ops console
+needs a full-page walkthrough against mainstream mid-console habits.
+
 
 ## Install
 
@@ -39,13 +42,16 @@ cp -r skills/harness-first          /path/to/project/.cursor/skills/harness-firs
 cp -r skills/skill-authoring        /path/to/project/.cursor/skills/skill-authoring
 cp -r skills/geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.cursor/skills/ai-dev-pipeline
+cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-console-ux
 
 # Claude Code
 cp -r skills/harness-first          /path/to/project/.claude/skills/harness-first
 cp -r skills/skill-authoring        /path/to/project/.claude/skills/skill-authoring
 cp -r skills/geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.claude/skills/ai-dev-pipeline
+cp -r skills/admin-console-ux       /path/to/project/.claude/skills/admin-console-ux
 ```
+
 
 For **ai-dev-pipeline**, copy alone installs the Skill docs; to also wire the
 runnable `.pipeline/` runtime into a project:
@@ -66,7 +72,8 @@ skills/                          # repo root
     ├── harness-first/
     ├── skill-authoring/
     ├── geo-article-generator/
-    └── ai-dev-pipeline/
+    ├── ai-dev-pipeline/
+    └── admin-console-ux/
 ```
 
 - [harness-first/](skills/harness-first/) — 5-phase gated project bootstrap
@@ -83,6 +90,10 @@ skills/                          # repo root
   - [scripts/](skills/ai-dev-pipeline/scripts/) — install + run_pipeline runtime
   - [templates/](skills/ai-dev-pipeline/templates/) — config + stage prompts
   - [references/](skills/ai-dev-pipeline/references/) — ops runbook, backend security
+- [admin-console-ux/](skills/admin-console-ux/) — mid-console ops UX / walkthrough
+  - [SKILL.md](skills/admin-console-ux/SKILL.md) — main workflow (start here)
+  - [references/](skills/admin-console-ux/references/) — ops habits, acceptance, anti-patterns
+
 
 Optional subdirectories (`scripts/`, `assets/`) are created per-skill when needed —
 not every skill requires them.
