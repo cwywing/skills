@@ -27,6 +27,7 @@ triggering", or any time you are about to hand a draft to skill-creator.
   - [prose-and-formatting.md](references/prose-and-formatting.md) — voice, tone, formatting
   - [instruction-design.md](references/instruction-design.md) — why-over-MUST, effort calibration
   - [examples-and-output-formats.md](references/examples-and-output-formats.md) — few-shot, contrast pairs
+  - [mutation-safety.md](references/mutation-safety.md) — write-safety for skills that change real state
 - [README.md](README.md) / [README.zh-CN.md](README.zh-CN.md) — this file
 
 Add `scripts/` or `assets/` only when a skill needs deterministic code or output

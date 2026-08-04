@@ -1,6 +1,6 @@
 # Designing instructions a model will actually follow
 
-Provenance: Fable 5 system prompt — `core_search_behaviors` item 2 (scale to complexity), `artifact_usage_criteria` (USE / DO NOT USE lists), and the copyright "Self-check before responding" block (`../../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Improving the skill") and `skill-development` (progressive disclosure).
+Provenance: Fable 5 system prompt — `core_search_behaviors` item 2 (scale to complexity), `artifact_usage_criteria` (USE / DO NOT USE lists), and the copyright "Self-check before responding" block (`../../../CLAUDE-FABLE-5/README.md`); official `skill-creator` ("Improving the skill") and `skill-development` (progressive disclosure); `shb-*` skill suite (`.agents/skills/shb-*`) for the bright-line-scales-with-blast-radius refinement and the ID-fabrication self-check.
 
 ## Knowledge goes in references/, not the body
 
@@ -17,6 +17,8 @@ Reconcile the two with one rule:
 > Use an absolute imperative only when the constraint is genuinely bright-line — a safety, legal, or correctness rule that must never be reasoned away. For the other ~95% of a skill (workflow, craft, formatting, preferences), explain the why and let the model apply judgment.
 
 Why it works: a model given reasons has good theory of mind and adapts the intent to cases you did not foresee. A model given a wall of MUSTs either overfits to your examples or spends effort lawyering the edges. Reasons generalize; decrees don't.
+
+The "genuinely bright-line" threshold is not fixed — **it scales with how much damage a violation does.** A content-generation skill's bright lines are few (copyright, safety); there, almost everything should explain its why. A skill that writes to a production system has a wider bright-line set, because "never fabricate an ID," "confirm before deleting," and "don't retry a failed write by guessing" are not preferences — violating them corrupts real data. For such skills, more absolutes are earned. See `mutation-safety.md` for the full mutation discipline; the rule here is the calibration: *what counts as non-negotiable expands with the skill's blast radius.*
 
 ## Calibrate effort to the task — don't hard-code one number
 
@@ -38,6 +40,14 @@ Concrete thresholds (20 lines, 1500 characters) and concrete cases make the boun
 ## Give the model a pre-action self-check
 
 For the failure modes that matter, embed a short checklist the model runs *before* acting. Fable 5 does this for copyright: "Is this quote 15+ words? Have I already quoted this source?" A handful of yes/no questions at the decision point catches more than a long warning paragraph, because it converts a vague rule into a concrete test applied at the right moment.
+
+One failure mode worth its own check, whenever a skill references records by ID: **is this ID one I obtained from a result, or one I am about to invent?** Models fabricate IDs readily — integer IDs especially, because a user saying "delete 102" hands over a number that *looks* like an ID but is often a serial number or a row index. Add a check that makes the model notice: "Am I holding an ID that came from a search result or a create response? If the user gave me a number by voice, have I confirmed it is the ID and not the serial?" See `mutation-safety.md` → "IDs come only from results" for the full rule.
+
+## Make reference loading a gate when skipping causes an irreversible mistake
+
+Progressive disclosure is the default: put detail in `references/`, let the model load on demand. "On demand" is fine for reads — the model can muddle through. It is too soft for writes: under time pressure the model skips the reference, and the detail it skipped was the fetch-then-merge rule it just violated, or the risk tier that needed a confirmation gate.
+
+When an operation carries real risk, escalate the loading instruction from a hint to a precondition — either a per-operation loading table ("before running X, read Y and Z") or an extracted `mutation-common.md` shared across a write-path family. The criterion is the same one as for `MUST` above: skipping causes an irreversible mistake, so the harder register is earned. Full pattern in `mutation-safety.md` → "Make reference loading a gate."
 
 ## Write for reuse, not for your three test cases
 

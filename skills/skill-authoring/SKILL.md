@@ -35,6 +35,7 @@ Follow this in order; skip a step only with a clear reason.
 - **Imperative voice, explain the why.** Write verb-first instructions and give the reason, rather than stacking ALL-CAPS MUSTs. Reserve absolute imperatives for the few genuinely non-negotiable constraints. → `references/prose-and-formatting.md`, `references/instruction-design.md`
 - **Calibrate, don't fix.** Tell the model how to scale effort to the task, not one rigid number. → `references/instruction-design.md`
 - **Show, with contrast.** Include Input→Output examples and Correct-vs-Incorrect pairs with a one-line rationale. → `references/examples-and-output-formats.md`
+- **Gate mutations.** When a skill creates, updates, or deletes real state, add risk tiers, scope confirmation, and a no-explore-on-failure rule. The `MUST` threshold widens with the skill's blast radius. → `references/mutation-safety.md`
 
 ## Reference files (read on demand)
 
@@ -44,6 +45,7 @@ Read the relevant file when you reach that part of drafting:
 - **`references/prose-and-formatting.md`** — voice, tone, formatting discipline, and what *not* to say.
 - **`references/instruction-design.md`** — making instructions a model actually follows: why-over-MUST, effort calibration, decision tables, self-checks, and knowledge placement.
 - **`references/examples-and-output-formats.md`** — few-shot examples, contrast pairs, and pinning exact output formats.
+- **`references/mutation-safety.md`** — extra discipline for skills that change real state: risk tiers, scope confirmation, fetch-then-merge, no-retry-by-guessing, ID-fabrication defense, and reference-loading gates. Read when the skill creates, updates, deletes, deploys, or sends.
 
 Each file records its provenance in the Fable 5 system prompt (`../../CLAUDE-FABLE-5/README.md`) and the official skill skills, so any pattern traces back to a source.
 
@@ -91,5 +93,12 @@ Resources
 
 Examples
 - [ ] At least one concrete Input→Output example; a Correct-vs-Incorrect contrast wherever a subtle pitfall is likely.
+
+Mutations (only if the skill creates/updates/deletes real state)
+- [ ] Write operations tiered by blast radius; higher-risk ops (bulk, delete, deploy, irreversible) gated behind explicit scope confirmation.
+- [ ] Update path against a replace-semantics backend uses fetch-then-merge (or warns the raw-body path clearly).
+- [ ] Failure handling tells the model to fix the named cause and resubmit once — not to vary fields and retry.
+- [ ] ID-fabrication defense: IDs come only from results; an integer-vs-serial-number trap is named if it applies.
+- [ ] If a skipped reference would cause an irreversible mistake, loading is a precondition (table or extracted common file), not a hint.
 
 Then hand the draft to **skill-creator** for evals, description optimization, and packaging.

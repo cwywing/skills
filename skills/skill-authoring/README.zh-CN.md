@@ -24,6 +24,7 @@ cp -r skills/skill-authoring /path/to/project/.claude/skills/skill-authoring
   - [prose-and-formatting.md](references/prose-and-formatting.md) — 语气、文风、格式
   - [instruction-design.md](references/instruction-design.md) — why 优于 MUST、力度校准
   - [examples-and-output-formats.md](references/examples-and-output-formats.md) — 少样本示例与对比对
+  - [mutation-safety.md](references/mutation-safety.md) — 会改动真实状态的写操作安全
 - [README.md](README.md) / [README.zh-CN.md](README.zh-CN.md) — 本文件
 
 仅在技能需要确定性代码或输出模板时，再添加 `scripts/` 或 `assets/` — 本元技能本身不需要。
