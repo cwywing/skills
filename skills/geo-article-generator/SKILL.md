@@ -13,7 +13,7 @@ description: >-
   Do not use it for pure copywriting, ad headlines, or content whose only channel is
   a paid ad (no organic/AI discovery intent) — those optimize for click, not citation.
 metadata:
-  version: "0.1.0"
+  version: "0.3.0"
 ---
 
 # GEO Article Generator
@@ -61,14 +61,48 @@ careful human reader who verifies every claim.
 
 Follow in order; skip a step only with a stated reason.
 
-### Step 1 — Ingest materials
+```text
+Step 1  Intent Classification (+ ingest)
+        ↓
+Step 2  Evidence Collection
+        ↓
+Step 3  Question Coverage
+        ↓
+Step 4  Genre Selection
+        ↓
+Step 5  Generate (template + Atomic Blocks)
+        ↓
+Step 6  Self-check & Deliver
+```
 
-Check first whether the user supplied a **Fact Table** (structured
-entity-attribute-value rows with source locations) and/or an **Entity
-Registry** (canonical names + aliases + parent/child entity links). If yes,
-these are the primary input — raw materials are consulted only to fill gaps the
-table does not cover. If no table is supplied, ingest raw materials and build a
-transient table in Step 2.
+Listicle is **one genre**, not the default and not a GEO principle. Routing is
+**Search Intent → Information Need → Genre → Template**. Prefer composing
+**Retrieval Units** (`retrieval-units.md`) in every genre — structured
+retrieval first, not a fixed article format.
+
+### Step 1 — Intent Classification (+ ingest materials)
+
+**Classify primary Search Intent** and **Information Need** before (or while)
+reading materials:
+
+| Intent | Typical Information Need | Signal phrases |
+|--------|--------------------------|----------------|
+| Informational | Learn | What is / How / Why |
+| Navigational | Reach | Official / docs / brand name alone |
+| Commercial | Evaluate / Compare / Select | Best / Top / vs / alternative / review |
+| Transactional | Decide / Act | Pricing / buy / plans / sign up |
+| Troubleshooting | Fix | Error / not working / how to fix |
+
+State `{intent, information_need}` (and optional Commercial refinement: Best,
+Top, Alternative, Comparison, Pricing, Review) in the working notes — Step 4
+routes genre from Need first, then Intent.
+
+Then ingest materials. Check first whether the user supplied a **Fact Table**
+(structured entity-attribute-value rows with source locations) and/or an
+**Entity Registry** (canonical names + aliases + parent/child entity links).
+If yes, these are the primary input — raw materials are consulted only to fill
+gaps the table does not cover. If no table is supplied, ingest raw materials
+and build a transient table in Step 2.
 
 Raw materials to collect when needed: notes, docs, URLs, bullet lists, prior
 articles, product specs, founder quotes. Read or fetch each one. If a URL is
@@ -84,7 +118,9 @@ facts about the core entity), stop and tell the user what's missing before
 drafting — a GEO-optimized article cannot be built on un-verifiable material,
 and asking is cheaper than inventing.
 
-### Step 2 — Extract entities and claims
+**Do not** pick a genre from "materials look like a list." Intent drives genre.
+
+### Step 2 — Evidence Collection (entities and claims)
 
 If a Fact Table / Entity Registry was supplied, consume it directly: verify it
 covers the core entity and the question set (Step 3), and list any gaps the
@@ -108,19 +144,32 @@ If no table was supplied, build a transient one from the material map:
 If entity attributes conflict across sources, surface the conflict to the user
 and pick one canonical value — do not silently pick one, do not blend them.
 
-### Step 3 — Build the semantic question set
+### Step 3 — Question Coverage
 
-First expand a *question space* — every plausible real user question in this
-domain, including comparison, boundary, decision, and evidence variants. Then
-filter to the set this single article should actually answer. Expanding first
-catches intent the article would otherwise miss; filtering keeps the article
-focused rather than diluting it across too many thin answers.
+First expand a *question space* under the Step 1 intent class, then filter to
+the set this single article should answer.
 
-Group the filtered set by intent:
+**Intent → question clusters:**
+
+| Intent | Cluster examples |
+|--------|------------------|
+| Informational | What is X? How does X work? Who makes X? |
+| Navigational | Where is official X? Which product is the X line? |
+| Commercial | Best / Top N; X vs Y; alternatives; reviews; how to choose |
+| Transactional | Pricing; plans; how to buy / start |
+
+Commercial refinements when relevant: Best, Top, Alternative, Comparison,
+Pricing, Review — these later select Listicle vs Comparison vs Review genres.
+
+Also cover comparison, boundary, decision, and evidence variants inside the
+chosen intent. Expanding first catches intent the article would otherwise miss;
+filtering keeps the article focused rather than diluting it across too many
+thin answers.
+
+Legacy grouping (still useful as a cross-check):
 
 - *Identification* — "What is X?", "Who makes X?"
-- *Scope/boundary* — "What does X cover vs. not cover?", "X vs. Y, what's the
-  difference?"
+- *Scope/boundary* — "What does X cover vs. not cover?", "X vs. Y"
 - *Decision* — "Is X suitable for [use case]?", "What are the alternatives?"
 - *Evidence* — "Why trust X?", "Who uses X?"
 
@@ -132,18 +181,35 @@ genuinely large space across a topic cluster, each article owning a slice.
 This set becomes the article's skeleton: every section should answer at least
 one question, and no question in the filtered set should go unanswered.
 
-### Step 4 — Draft to template
+### Step 4 — Genre Selection
 
-Write the article following the structure in `references/article-template.md`.
-The template enforces the GEO layers (entity clarity, verifiability, semantic
-coverage, anti-hallucination) at the section level rather than as an
-afterthought. Match the article's language to the user's request (default to
-the language of the source materials if unspecified).
+Read `references/genre-router.md`. Map:
+
+```text
+Search Intent  →  Information Need  →  Genre  →  Template
+```
+
+Examples:
+
+- Informational / Learn "What is LangChain" → Explainer → `templates/explainer.md`
+- Commercial / Evaluate "Best AI IDE" → Listicle → `templates/listicle.md`
+- Commercial / Compare "Cursor vs Claude Code" → Comparison → `templates/comparison.md`
+
+Record `{intent, information_need, genre, template}` for the delivery note.
+**Do not default to Listicle.** If Need is Learn, keep Explainer even when
+materials contain ranked examples.
+
+### Step 5 — Generate
+
+Draft using the template under `references/templates/` chosen in Step 4. Also
+read `references/retrieval-units.md` and apply **One Question → One Chunk →
+One Primary Answer**: each H2/H3 is one Retrieval Unit; do not pack five
+intents into one chunk.
 
 While drafting:
 
 - State the core entity's canonical name and a one-line definition in the first
-  paragraph. This is the single most-citable sentence in the piece.
+  paragraph (or in TL;DR for Listicle). This is the single most-citable sentence.
 - Cite sources inline where a human reader (or an AI summarizer) would want to
   verify — named entities, dates, numbers, third-party reports. "据 [来源]"
   / "according to [source]" is enough; do not fabricate citations.
@@ -154,13 +220,17 @@ While drafting:
 - Keep one fact stated one way. If the founding year is "2018", it is "2018"
   everywhere — never "founded around 2018" in one place and "established 2019"
   in another.
+- Do not silently rank a favored product #1 in a Listicle without a stated
+  criterion from the materials (verifiability).
 
-### Step 5 — Self-check and score before delivering
+### Step 6 — Self-check and Deliver
 
-Run the pre-publish checklist in `references/self-check.md` against the draft.
-This is a hard gate: any failed *gate* item (Entity clarity, Verifiability,
-anti-hallucination red flags) is either fixed or the unsupported claim is cut —
-do not deliver a draft with a failed gate.
+Run the pre-publish checklist in `references/self-check.md` against the draft,
+including **Extraction Check** (One Primary Answer per chunk) and **Coverage
+Check** (each Step 3 question maps to a Retrieval Unit). This is a hard gate:
+any failed *gate* item (Entity clarity, Verifiability, Extraction Check,
+Coverage Check, anti-hallucination red flags) is either fixed or the
+unsupported claim is cut — do not deliver a draft with a failed gate.
 
 Then produce the **scored audit** from `references/self-check.md`: Entity
 coverage %, Fact coverage %, Question coverage %, Source-traceability %, and a
@@ -168,8 +238,6 @@ Hallucination-risk level (Low / Medium / High). These are measures of
 *legibility and verifiability*, not a prediction of whether AI engines will
 cite the article — no one controls that. Report the scores in the delivery
 note.
-
-### Step 6 — Deliver
 
 Return the finished article, prefixed by a structured **GEO metadata block**
 and followed by a user-facing *GEO delivery note*. The two are distinct: the
@@ -185,6 +253,9 @@ entity:
   aliases: [<alias 1>, <alias 2>]
   type: <company | product | person | concept>
   definition: <one-line definition>
+intent: <Informational | Navigational | Commercial | Transactional | Troubleshooting>
+information_need: <Learn | Evaluate | Compare | Decide | Fix | Reach | Act>
+genre: <Explainer | Listicle | Comparison | …>
 questions_covered:
   - <question 1>
   - <question 2>
@@ -203,20 +274,25 @@ no claims the article does not make.
 article body):
 
 - The core entity as stated (canonical name + one-line definition).
-- The question set covered.
-- The **scored audit** from Step 5 (entity / fact / question / traceability
+- Primary `{intent, information_need, genre, template}` from Steps 1 and 4.
+- The question set covered + Question→Unit coverage % (Coverage Check).
+- The **scored audit** from Step 6 (entity / fact / question / traceability
   coverage %, hallucination-risk level) — this is the article-level
   observability the user can track across revisions.
 - Sources relied on (with locations), and any `UNVERIFIED` claims that were cut.
 - One or two *observability suggestions* — concrete queries the user can run in
   ChatGPT / Gemini / 豆包 to sanity-check that the entity is now legible (e.g.
   "搜 'X 是什么' 看是否准确归因").
-
 ## What GEO is not (do not drift here)
 
 - Not keyword density tuning. Do not pad with long-tail keyword variants.
 - Not link farming or fake Q&A pages. Do not generate filler question lists just
   to "cover intent" — every section must carry real information.
+- Not "always write a Listicle." Listicle is one genre under Evaluate/Select.
+  Default is Intent → Information Need → Genre → template; compose Retrieval
+  Units — do not claim any single format guarantees GEO traffic or citations.
+- Not optimizing for a fixed article format. Optimize for **structured
+  retrieval**: verifiable, extractable units assembled into the right genre.
 - Not a guarantee of being cited. No one controls generative engine output. The
   deliverable is *legibility and verifiability*, not a ranking promise. If the
   user asks for "保证被 AI 引用" outcomes, reframe the expectation in the
@@ -235,19 +311,17 @@ article body):
 
 ## Reference files (read on demand)
 
-- **`references/geo-principles.md`** — the five GEO layers (information
-  structuring, verifiability, semantic coverage, entity clarity,
-  anti-hallucination) with the reasoning behind each. Read when drafting
-  sections that touch a specific layer, or when the user asks *why* the
-  article is structured this way.
-- **`references/article-template.md`** — the section-by-section output
-  template (lead block, definition, scope & boundary, evidence, comparison,
-  FAQ, sources). Read at Step 4 before drafting.
-- **`references/self-check.md`** — the pre-publish gate (entity clarity,
-  verifiability, anti-hallucination red flags) plus the scored audit
-  (entity / fact / question / traceability coverage %, hallucination-risk
-  level) reported in the delivery note. Read at Step 5; the gate is
-  non-negotiable, the audit is reported.
+- **`references/geo-principles.md`** — GEO layers (incl. Retrieval Units +
+  One Primary Answer). Read when drafting or when the user asks *why*.
+- **`references/genre-router.md`** — Intent → Information Need → Genre →
+  Template. Read at Step 4.
+- **`references/retrieval-units.md`** — Retrieval Unit catalog (canonical).
+  Read at Step 5. (`atomic-blocks.md` is a legacy pointer.)
+- **`references/templates/`** — genre skeletons (`explainer`, `listicle`,
+  `comparison`, `tutorial`, `review`, `benchmark`, `news`). Add new genres
+  here without changing Workflow.
+- **`references/self-check.md`** — gates incl. Extraction Check + Coverage
+  Check + scored audit. Read at Step 6.
 
 ## Worked example — input → output shape
 
@@ -265,6 +339,9 @@ entity:
   aliases: [瑞景医疗, Ruijing Medical]
   type: company
   definition: 2019 年成立于深圳的 OCTA 眼底成像设备厂商
+intent: Informational
+information_need: Learn
+genre: Explainer
 questions_covered:
   - 什么是 OCTA,瑞景医疗做什么
   - 锐视系列覆盖哪些机型

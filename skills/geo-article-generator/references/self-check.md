@@ -1,10 +1,10 @@
 # Pre-publish self-check
 
-Read at Step 5. This is a hard gate, not a polish pass: any failed item is
+Read at **Step 6**. This is a hard gate, not a polish pass: any failed item is
 either fixed or the unsupported material is cut. Do not deliver a draft with a
-failed `Entity clarity` or `Verifiability` check — those two failure modes
-teach AI engines to mis-cite or ignore the entity, which is worse than not
-being cited at all.
+failed `Entity clarity`, `Verifiability`, or `Extraction Check` gate — those
+failure modes teach AI engines to mis-cite, ignore, or retrieve the wrong
+chunk, which is worse than not being cited at all.
 
 Run these as yes/no questions against the draft before handing it to the user.
 
@@ -42,10 +42,62 @@ an un-backed claim. Anti-hallucination outranks completeness.
   answers it?
 - [ ] Does every section answer at least one real user question (not just
   exist for structure)?
+- [ ] Are questions grouped under a primary Search Intent
+  (Informational / Navigational / Commercial / Transactional)?
 - [ ] Are comparison/boundary questions covered explicitly, with the other
   side of the comparison defined too?
 - [ ] Is there any keyword-stuffed paragraph or long-tail keyword list? If so,
   cut it.
+
+## Extraction Check (non-negotiable for chunk quality)
+
+AI retrieval works on chunks. For **each** H2/H3 section (Retrieval Unit):
+
+- [ ] Can this section **independently** answer one clear query if lifted alone?
+- [ ] Is the target query nameable in one short phrase (e.g. "多少钱？",
+  "优点？", "适合谁？", "X vs Y 哪个好？")?
+- [ ] Does the section deliver **One Primary Answer** only (no packing pricing +
+  pros + history into one chunk)?
+- [ ] Does the section restate the entity where a cited sentence would otherwise
+  lose the referent?
+- [ ] Are mixed intents split into separate Retrieval Units?
+
+Genre-specific (only if that genre was selected in Step 4):
+
+- **Listicle:** TL;DR present? Quick Comparison Table present? Each #N item has
+  Overview + Pros + Cons + Pricing as **separate** units (or explicit gap)?
+  Ranking rule stated?
+- **Comparison:** shared dimensions for both sides? Matrix/table extractable?
+- **Review:** Pros and Cons both present when materials allow?
+
+If a section fails Extraction Check, split or rewrite it before shipping.
+
+## Coverage Check (non-negotiable for question→unit mapping)
+
+Trace: **Search Intent / Information Need → Questions (Step 3) → Retrieval
+Units in the draft.**
+
+For every filtered question in Step 3:
+
+- [ ] Is there ≥1 Retrieval Unit (heading / table / FAQ item) that answers it?
+- [ ] Is the mapping explicit enough to name (e.g. What→Definition, How→Tutorial
+  steps, Why→Evidence, Price→Pricing, Alternative→Comparison)?
+
+Report **Question→Unit coverage %** in the delivery note (answered questions /
+filtered question set). Target ≥95% for ship; anything below is a gap to fix or
+an explicit deferral stated to the user.
+
+Example trace:
+
+```text
+What is X?     → Definition     ✓
+How to install → Timeline steps ✓
+Why trust?     → Evidence       ✓
+How much?      → Pricing        ✓
+X vs Y?        → Comparison     ✓
+```
+
+Coverage Check is higher value than "does an FAQ section exist."
 
 ## Consistency
 
@@ -74,10 +126,17 @@ an un-backed claim. Anti-hallucination outranks completeness.
 - A "FAQ" section exists but its questions are invented keywords, not real
   user phrasings.
 - The article promises or implies a guaranteed AI-citation outcome.
+- The article claims "Listicle = GEO traffic" (or any single genre) as a
+  guaranteed mechanism — frame format as Genre Router choice + extractable
+  blocks, not a ranking promise.
 - The audit emits an "AI citation probability" score (see below — this is not a
   valid metric).
 - The article is one of a batch of thinly-differentiated pages generated off
   one shared fact set to "cover more keywords" — a content-farm pattern.
+- A section fails Extraction Check (cannot answer one query as a standalone
+  chunk, or packs multiple primary answers).
+- Coverage Check fails: a Step 3 question has no mapped Retrieval Unit and was
+  not explicitly deferred.
 
 If a red flag is present, fix it or cut the offending section. Then re-run the
 self-check from the top.
@@ -96,7 +155,11 @@ Step 2 entity/claim inventory and the Step 3 question set.
   may be tightly scoped) — flag only when a question-set answer is missing a
   backing fact that exists.
 - **Question coverage %** — share of the Step 3 filtered question set that the
-  article answers. Target 100%; anything below is a gap to flag.
+  article answers (same denominator as Coverage Check / Question→Unit
+  coverage). Target 100%; anything below is a gap to flag.
+- **Question→Unit coverage %** — share of filtered questions that map to an
+  explicit Retrieval Unit (report alongside Question coverage; usually equal
+  when Extraction Check passes).
 - **Source-traceability %** — share of factual claims that carry a source *
   and location* (document + page / section / anchor). Target 100%.
 - **Hallucination-risk level** — Low / Medium / High. Low = every claim traced

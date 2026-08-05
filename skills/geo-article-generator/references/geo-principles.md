@@ -1,11 +1,19 @@
-# GEO principles — the five layers
+# GEO principles — the layers
 
 Provenance: distilled from the GEO article this skill was built from
-(Generative Engine Optimization, 2026). Each layer is a *failure mode* an AI
-engine hits when summarizing a brand/topic, paired with the editorial fix.
+(Generative Engine Optimization, 2026), plus retrieval-oriented drafting rules
+(structured extractable blocks; One Question → One Chunk). Each layer is a
+*failure mode* an AI engine hits when summarizing a brand/topic, paired with
+the editorial fix.
 
 Read this when drafting a section that touches a specific layer, or when the
 user asks *why* the article is structured the way it is.
+
+**Not a principle:** "Listicle is the best format for GEO traffic." That is an
+observational hypothesis about one *genre*. Prefer structured, independently
+extractable **Retrieval Units** in every genre; choose Listicle only via the
+Genre Router when Information Need is Evaluate / Select. See
+`genre-router.md` and `retrieval-units.md`.
 
 ## 1. Information structuring (基础信息结构化)
 
@@ -54,10 +62,12 @@ not keyword strings. Keyword-stuffed content answers no real question and gets
 skipped.
 
 **Fix:** build the article from a *question set* (Step 3), not a keyword list.
-Each section answers at least one real user question. Cover the
-comparison/boundary questions explicitly — "X vs Y 有什么区别", "X 适用于哪些
-场景" — because those are exactly the queries AI engines surface as
-generated answers.
+Group questions under Search Intent classes first (Informational /
+Navigational / Commercial / Transactional), then refine Commercial into Best /
+Top / Alternative / Comparison / Pricing / Review as needed. Each section
+answers at least one real user question. Cover the comparison/boundary
+questions explicitly — "X vs Y 有什么区别", "X 适用于哪些场景" — because those
+are exactly the queries AI engines surface as generated answers.
 
 **Why boundary sections outperform self-praise:** a section that defines what
 the entity is *not* gives the summarizer a clean edge to draw; three
@@ -87,13 +97,47 @@ outdated team size, a mis-stated certification. AI engines present generated
 answers in a confident tone, so errors propagate *as if verified*. A wrong
 citation is worse than no citation.
 
-**Fix:** in Step 5, run every concrete fact (numbers, dates, addresses, names,
+**Fix:** in Step 6, run every concrete fact (numbers, dates, addresses, names,
 credentials, customer lists) against the source materials. Anything not backed
 gets cut. If the user supplied a known-wrong public fact to correct, state the
 correction explicitly and cite the authoritative source — this is one of the
 few cases where repeating the wrong fact (to correct it) is useful, but frame
 it as "X 误传为 A,实际为 B,依据 [来源]".
 
-**Why this layer is non-negotiable:** the other four layers raise the chance
-of being cited; this layer prevents being cited *wrongly*. A brand misquoted
-in a generated answer loses more trust than a brand absent from it.
+**Why this layer is non-negotiable:** the other layers raise the chance of
+being cited; this layer prevents being cited *wrongly*. A brand misquoted in
+a generated answer loses more trust than a brand absent from it.
+
+## 6. Structured extractable blocks / Retrieval Units (结构化可抽取单元)
+
+**Failure mode:** the article is a continuous essay. Retrieval systems and
+summarizers work on **chunks**. A paragraph that mixes pricing, pros, story,
+and CTA cannot answer "多少钱？" cleanly, so the engine skips it or invents a
+fragment.
+
+**Fix:** compose the article from **Retrieval Units** — Definition, Summary,
+Comparison, Feature Matrix, Pricing, Pros, Cons, Best For, Overview, Evidence,
+Timeline/Checklist, FAQ item, Decision Tree, Recommendation. Full catalog:
+`retrieval-units.md`. Use them in *every* genre when the question set calls
+for them — not only in Listicles. Genre templates under `templates/` only
+*order* units; they do not replace this layer.
+
+**Why it matters:** structured units raise the chance a chunk is lifted as a
+complete answer. This is about **extractability**, not a promise that any one
+format (e.g. Listicle) will rank or get cited.
+
+## 7. One Question → One Chunk → One Primary Answer
+
+**Failure mode:** one section dumps many intents ("好用、便宜、快、我们用了"),
+or a labeled "Pricing" chunk also sells features and history. Embeddings and
+extractors degrade; AI retrieval returns the blob for the wrong sub-query.
+
+**Fix:** each H2/H3 owns **one primary question** and delivers **one primary
+answer**. The section must still make sense if cited alone — restate the
+entity name; no bare pronouns whose referent lives only in a prior paragraph.
+If a section cannot answer a single clear query on its own, or answers several
+unrelated queries, split or rewrite it (Extraction Check + Coverage Check in
+`self-check.md`).
+
+**Relationship to genre:** Explainer, Comparison, Review, and Listicle all
+obey this rule. Genre chooses the *skeleton*; Retrieval Units are the *bones*.

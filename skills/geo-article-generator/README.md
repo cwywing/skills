@@ -7,35 +7,27 @@ raw research) into a publishable article that generative AI engines — ChatGPT,
 Gemini, 豆包, Perplexity, AI search overviews — can correctly identify,
 understand, and cite.
 
-This is **not** SEO keyword-content generation. It is information engineering:
-the article states a clear entity, backs every claim with a source, answers
-real user questions (including comparison/boundary queries), and strips out
-the adjective stacks and vague metrics that AI summarizers discard or
-hallucinate around.
+**This skill optimizes for structured retrieval, not a specific article
+format.** Articles are assemblies of verifiable **Retrieval Units** under a
+Genre chosen by Search Intent → Information Need — not "always Listicle," not
+keyword SEO.
 
 ## What it gives you
 
-- A six-step workflow: ingest materials → extract entities & claims → build a
-  semantic question set (expand a question space, then filter) → draft to a
-  GEO template → self-check & score → deliver with a scored audit + observability
-  note.
-- Accepts a supplied **Fact Table / Entity Registry** as the single source of
-  truth (preferred), and falls back to building a transient one from raw
-  materials. Every citable fact carries its source *location* (document + page
-  / section / anchor), not just a source name.
-- Three reference files loaded on demand: the five GEO layers, the
-  section-by-section article template, and the pre-publish gate + scored audit.
-- A worked Input→Output example and a Correct-vs-Incorrect contrast pair.
-- Two explicit red lines: no "AI citation probability" score (fake-precise
-  promise the source thesis rejects), no content-farm batch generation.
-- Emits a publishable **GEO metadata block** (entity + questions + sources, in
-  YAML) as the article prefix — strippable into JSON-LD / Schema markup at
-  publish time — and avoids bare pronouns ("该系统", "我们") so lifted
-  sentences stay correctly attributed.
+- Workflow: **Intent + Information Need** → Evidence → Question Coverage →
+  **Genre Selection** → Generate (Retrieval Units) → Self-check & Deliver.
+- **Genre Router** with a stable Information Need middle layer (Learn /
+  Evaluate / Compare / Decide / Fix / Reach / Act).
+- **Retrieval Units** + **One Question → One Chunk → One Primary Answer**.
+- **Extraction Check** + **Coverage Check** (question → unit mapping %).
+- Templates under `references/templates/` (explainer, listicle, comparison,
+  tutorial, review, benchmark, news) — add genres without changing Workflow.
+- Fact Table / Entity Registry as source of truth; publishable GEO metadata
+  (entity + intent + information_need + genre + questions + sources).
+- Red lines: no "AI citation probability"; no content-farm batches; no
+  "Listicle = guaranteed GEO traffic."
 
 ## Install
-
-Copy this folder into the project's skill directory:
 
 ```bash
 # Cursor
@@ -45,26 +37,18 @@ cp -r skills/geo-article-generator /path/to/project/.cursor/skills/geo-article-g
 cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-generator
 ```
 
-Both tools auto-discover skills. No extra configuration needed.
-
 ## Layout
 
-- [SKILL.md](SKILL.md) — main workflow (start here)
+- [SKILL.md](SKILL.md) — main workflow
 - [references/](references/)
-  - [geo-principles.md](references/geo-principles.md) — the five GEO layers and the reasoning behind each
-  - [article-template.md](references/article-template.md) — section-by-section output template
-  - [self-check.md](references/self-check.md) — pre-publish gate and red flags
+  - [geo-principles.md](references/geo-principles.md)
+  - [genre-router.md](references/genre-router.md)
+  - [retrieval-units.md](references/retrieval-units.md)
+  - [atomic-blocks.md](references/atomic-blocks.md) — legacy pointer
+  - [self-check.md](references/self-check.md)
+  - [templates/](references/templates/) — genre skeletons
 
 ## What GEO is not
 
-No keyword stuffing, no link farming, no fake Q&A pages, and no guarantee of
-being cited — no one controls generative engine output. The deliverable is
-*legibility and verifiability*, which raises the probability of correct
-citation; it does not purchase it.
-
-## Origin
-
-Built from the GEO (Generative Engine Optimization) article discussing why GEO
-is information engineering rather than a ranking trick, and why entity
-clarity, verifiability, and anti-hallucination are the layers that actually
-move the needle for AI discoverability.
+No keyword stuffing, no Listicle-by-default, no citation guarantees. The
+deliverable is legibility, verifiability, and extractable retrieval structure.
