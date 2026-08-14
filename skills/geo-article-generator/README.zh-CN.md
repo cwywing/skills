@@ -16,6 +16,7 @@
 - **Genre Router** 带稳定的 Information Need 中间层（Learn / Evaluate / Compare /
   Decide / Fix / Reach / Act）。
 - **Retrieval Units** + **One Question → One Chunk → One Primary Answer**。
+- **源事实硬闸门**（事实台账；源没有的 FAQ/场景删除，不进正文）。
 - **Extraction Check** + **Coverage Check**（问题 → 单元覆盖率）。
 - 模板在 `references/templates/`（explainer、listicle、comparison、tutorial、
   review、benchmark、news）——新增体裁不必改 Workflow。
@@ -40,6 +41,7 @@ cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-g
   - [genre-router.md](references/genre-router.md)
   - [retrieval-units.md](references/retrieval-units.md)
   - [atomic-blocks.md](references/atomic-blocks.md) — 旧名指针
+  - [source-grounding.md](references/source-grounding.md) — 源事实硬闸门
   - [self-check.md](references/self-check.md)
   - [templates/](references/templates/) — 体裁骨架
 

@@ -13,7 +13,7 @@ description: >-
   Do not use it for pure copywriting, ad headlines, or content whose only channel is
   a paid ad (no organic/AI discovery intent) — those optimize for click, not citation.
 metadata:
-  version: "0.3.0"
+  version: "0.4.0"
 ---
 
 # GEO Article Generator
@@ -37,11 +37,17 @@ careful human reader who verifies every claim.
   the referent is not obvious from the same sentence — restate the canonical
   name, because a summarizer may lift the sentence out of context and lose the
   referent.
+- **Source-only facts (hard).** Every number, date, spec, scene, FAQ answer,
+  and product-scope sentence in the publishable body must appear in the
+  supplied source files (transcript / WeChat body / user brief / attached
+  authority). Brand “common knowledge,” mall pages, and plausible FAQ answers
+  are **not** sources. Unbacked claims are `UNVERIFIED` (delivery note only)
+  or **cut** — they must not ship. Read `references/source-grounding.md`.
 - **Verifiable over impressive.** Every factual claim should be traceable to a
   source in the supplied materials or a named external authority. Cut any claim
   that cannot be backed. Adjectives without referents ("industry-leading",
   "innovative") are noise that AI summarizers discard or, worse, hallucinate
-  around.
+  around. Completeness never outranks this.
 - **Answer questions, don't stuff keywords.** GEO cares about semantic intent
   clusters, not keyword density. Cover what real users actually ask, including
   the comparison/boundary questions AI engines love to surface.
@@ -222,15 +228,20 @@ While drafting:
   in another.
 - Do not silently rank a favored product #1 in a Listicle without a stated
   criterion from the materials (verifiability).
+- Entity one-liners may only use attributes the source actually states (name,
+  tags, quoted slogans). Do not invent taxonomy, use-cases, or channel CTAs
+  (客服、批量报价、集成商) to look like a complete brand page.
 
 ### Step 6 — Self-check and Deliver
 
-Run the pre-publish checklist in `references/self-check.md` against the draft,
-including **Extraction Check** (One Primary Answer per chunk) and **Coverage
-Check** (each Step 3 question maps to a Retrieval Unit). This is a hard gate:
-any failed *gate* item (Entity clarity, Verifiability, Extraction Check,
-Coverage Check, anti-hallucination red flags) is either fixed or the
-unsupported claim is cut — do not deliver a draft with a failed gate.
+Run `references/source-grounding.md` (fact ledger: every body claim → source
+location or cut) **then** the checklist in `references/self-check.md`,
+including **Extraction Check** and **Coverage Check**. This is a hard gate:
+any failed *gate* item (Source grounding, Entity clarity, Verifiability,
+Extraction Check, Coverage Check, anti-hallucination red flags) is either
+fixed or the unsupported claim is cut — do not deliver a draft with a failed
+gate. **High hallucination-risk drafts do not ship.** Coverage gaps from
+missing source facts are acceptable; invented coverage is not.
 
 Then produce the **scored audit** from `references/self-check.md`: Entity
 coverage %, Fact coverage %, Question coverage %, Source-traceability %, and a
@@ -308,6 +319,9 @@ article body):
   generate a batch of thinly-differentiated pages off one set of facts to
   "cover more keywords". That is the pollution pattern platforms penalize and
   the source GEO article warns against.
+- Not a license to invent. GEO structure (FAQ, scenes, entity definition)
+  must not add facts the source did not state. Prefer a short sourced article
+  over a complete-looking one with unsourced bullets.
 
 ## Reference files (read on demand)
 
@@ -320,8 +334,10 @@ article body):
 - **`references/templates/`** — genre skeletons (`explainer`, `listicle`,
   `comparison`, `tutorial`, `review`, `benchmark`, `news`). Add new genres
   here without changing Workflow.
-- **`references/self-check.md`** — gates incl. Extraction Check + Coverage
-  Check + scored audit. Read at Step 6.
+- **`references/source-grounding.md`** — source-only fact ledger; UNVERIFIED
+  never in the publishable body. Read at Step 2 and Step 6 (before self-check).
+- **`references/self-check.md`** — gates incl. Source grounding, Extraction
+  Check + Coverage Check + scored audit. Read at Step 6.
 
 ## Worked example — input → output shape
 

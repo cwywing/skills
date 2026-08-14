@@ -19,6 +19,7 @@ keyword SEO.
 - **Genre Router** with a stable Information Need middle layer (Learn /
   Evaluate / Compare / Decide / Fix / Reach / Act).
 - **Retrieval Units** + **One Question → One Chunk → One Primary Answer**.
+- **Source grounding** (fact ledger; unsourced FAQ/scenes are cut, not shipped).
 - **Extraction Check** + **Coverage Check** (question → unit mapping %).
 - Templates under `references/templates/` (explainer, listicle, comparison,
   tutorial, review, benchmark, news) — add genres without changing Workflow.
@@ -45,6 +46,7 @@ cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-g
   - [genre-router.md](references/genre-router.md)
   - [retrieval-units.md](references/retrieval-units.md)
   - [atomic-blocks.md](references/atomic-blocks.md) — legacy pointer
+  - [source-grounding.md](references/source-grounding.md) — source-only fact ledger
   - [self-check.md](references/self-check.md)
   - [templates/](references/templates/) — genre skeletons
 

@@ -98,11 +98,14 @@ answers in a confident tone, so errors propagate *as if verified*. A wrong
 citation is worse than no citation.
 
 **Fix:** in Step 6, run every concrete fact (numbers, dates, addresses, names,
-credentials, customer lists) against the source materials. Anything not backed
-gets cut. If the user supplied a known-wrong public fact to correct, state the
-correction explicitly and cite the authoritative source — this is one of the
-few cases where repeating the wrong fact (to correct it) is useful, but frame
-it as "X 误传为 A,实际为 B,依据 [来源]".
+credentials, customer lists, use-case bullets, FAQ answers) against the
+**allowed sources only** (`source-grounding.md`). Anything not backed is cut
+or marked `UNVERIFIED` in the delivery note — **never** left in the
+publishable body. Do not fill gaps from the brand website, search, or
+“everyone knows.” If the user supplied a known-wrong public fact to correct,
+state the correction explicitly and cite the authoritative source — this is one
+of the few cases where repeating the wrong fact (to correct it) is useful, but
+frame it as "X 误传为 A,实际为 B,依据 [来源]".
 
 **Why this layer is non-negotiable:** the other layers raise the chance of
 being cited; this layer prevents being cited *wrongly*. A brand misquoted in

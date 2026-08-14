@@ -1,10 +1,9 @@
 # Pre-publish self-check
 
 Read at **Step 6**. This is a hard gate, not a polish pass: any failed item is
-either fixed or the unsupported material is cut. Do not deliver a draft with a
-failed `Entity clarity`, `Verifiability`, or `Extraction Check` gate — those
-failure modes teach AI engines to mis-cite, ignore, or retrieve the wrong
-chunk, which is worse than not being cited at all.
+either fixed or the unsupported material is cut. Do not deliver a draft with a failed `Source grounding`, `Entity clarity`,
+`Verifiability`, or `Extraction Check` gate. Source grounding outranks
+completeness.
 
 Run these as yes/no questions against the draft before handing it to the user.
 
@@ -20,8 +19,29 @@ Run these as yes/no questions against the draft before handing it to the user.
   they disagree, has the conflict been flagged to the user rather than
   papered over?
 
-If any item fails, rewrite the lead before proceeding. Do not deliver with an
-ambiguous entity.
+If the **source** does not define what the entity does, restate only the
+canonical name and source tags — do **not** invent a product taxonomy to pass
+this gate. Source grounding outranks a polished one-liner.
+
+If any remaining item fails (name collision, conflicting names), rewrite the
+lead or flag the user. Do not deliver with an ambiguous entity.
+
+## Source grounding (non-negotiable — outranks completeness)
+
+Read `source-grounding.md`. Against `article-geo.md` (or the publishable body):
+
+- [ ] Is there a **fact ledger** (in `geo-metadata.json` or the delivery note)
+  covering every number, date, spec, scene bullet, and FAQ answer?
+- [ ] Does every ledger row that appears in the body have `status: sourced`
+  plus a jumpable location (transcript / WeChat body / user brief / attached
+  filing)?
+- [ ] Are `UNVERIFIED` claims absent from the body (delivery note only)?
+- [ ] Did FAQ / 典型场景 / 实体定义 **not** add mall-page or common-knowledge
+  facts (客服、批量报价、支架/钢管等源未出现的品类)?
+- [ ] If a needed GEO slot has no source fact, was the slot **dropped** rather
+  than filled?
+
+If any item fails, cut the claim. Do not ship High hallucination-risk drafts.
 
 ## Verifiability (non-negotiable)
 
@@ -123,6 +143,9 @@ Coverage Check is higher value than "does an FAQ section exist."
   verifiable subject+predicate.
 - The same attribute reads two different ways in the article.
 - A factual claim has no source and was not marked `UNVERIFIED`/cut.
+- An FAQ answer, typical-use bullet, or entity definition uses facts not in
+  the supplied transcript / original article / user brief.
+- `UNVERIFIED` text appears in the reader-facing body.
 - A "FAQ" section exists but its questions are invented keywords, not real
   user phrasings.
 - The article promises or implies a guaranteed AI-citation outcome.
@@ -162,10 +185,11 @@ Step 2 entity/claim inventory and the Step 3 question set.
   when Extraction Check passes).
 - **Source-traceability %** — share of factual claims that carry a source *
   and location* (document + page / section / anchor). Target 100%.
-- **Hallucination-risk level** — Low / Medium / High. Low = every claim traced
-  to a source location; Medium = some claims sourced but locations missing or
-  some `UNVERIFIED` retained with disclosure; High = claims present without any
-  source. High-risk drafts do not ship.
+- **Hallucination-risk level** — Low / Medium / High. Low = every body claim
+  is `sourced` in the fact ledger; Medium = locations thin but still in the
+  allowed source set; High = body claims with no allowed source (including
+  invented FAQ/scenes). **High-risk drafts do not ship.** `UNVERIFIED` in the
+  body counts as High.
 
 ### Metrics that are NOT valid here
 
