@@ -14,8 +14,9 @@
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | 把计划拆成有序任务，用 Cursor Agent CLI（`agent -p --force`）持续交付 |
 | [admin-console-ux](skills/admin-console-ux/) | 优化管理后台交互与显示，对齐主流中后台**运维使用习惯** |
 | [h5-style-unify](skills/h5-style-unify/) | 统一**既有** H5 / 移动端项目的风格配色设计 — token 真相源、机器门禁、验收页，双案例交叉验证 |
+| [swiftui-style-unify](skills/swiftui-style-unify/) | 同一套五环统一法用于**既有** SwiftUI / iOS 应用 — `DesignTokens` 命名空间、Dynamic Type 排版、ripgrep 门禁、共享 SoT 代码生成 |
 
-两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent 啃完）时，用 **ai-dev-pipeline**。需要按运维习惯整站走查并统一后台 UX 时，用 **admin-console-ux**。需要把既有 H5/移动端代码库的配色样式收敛到单一 token 源并加 lint 门禁时，用 **h5-style-unify**。
+两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent 啃完）时，用 **ai-dev-pipeline**。需要按运维习惯整站走查并统一后台 UX 时，用 **admin-console-ux**。需要把既有 H5/移动端代码库的配色样式收敛到单一 token 源并加 lint 门禁时，用 **h5-style-unify**。SwiftUI 应用做同样的统一时用 **swiftui-style-unify**；同一产品两端并存时，两个技能在共享 web SoT 处组合。
 
 
 ## 安装
@@ -38,6 +39,7 @@ cp -r skills/geo-article-generator  /path/to/project/.cursor/skills/geo-article-
 cp -r skills/ai-dev-pipeline        /path/to/project/.cursor/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-console-ux
 cp -r skills/h5-style-unify         /path/to/project/.cursor/skills/h5-style-unify
+cp -r skills/swiftui-style-unify    /path/to/project/.cursor/skills/swiftui-style-unify
 
 # Claude Code
 cp -r skills/harness-first          /path/to/project/.claude/skills/harness-first
@@ -46,6 +48,7 @@ cp -r skills/geo-article-generator  /path/to/project/.claude/skills/geo-article-
 cp -r skills/ai-dev-pipeline        /path/to/project/.claude/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.claude/skills/admin-console-ux
 cp -r skills/h5-style-unify         /path/to/project/.claude/skills/h5-style-unify
+cp -r skills/swiftui-style-unify    /path/to/project/.claude/skills/swiftui-style-unify
 ```
 
 
@@ -69,7 +72,8 @@ skills/                          # 仓库根目录
     ├── geo-article-generator/
     ├── ai-dev-pipeline/
     ├── admin-console-ux/
-    └── h5-style-unify/
+    ├── h5-style-unify/
+    └── swiftui-style-unify/
 ```
 
 - [harness-first/](skills/harness-first/) — 五阶段门控式项目启动
@@ -94,6 +98,11 @@ skills/                          # 仓库根目录
   - [scripts/](skills/h5-style-unify/scripts/) — fail-closed 样式审计脚本（零依赖）
   - [assets/](skills/h5-style-unify/assets/) — theme.css / stylelint / 验收页模板
   - [references/](skills/h5-style-unify/references/) — token 分类法、技术栈适配、门禁配置、坑清单、案例对照
+- [swiftui-style-unify/](skills/swiftui-style-unify/) — SwiftUI/iOS 风格配色统一
+  - [SKILL.md](skills/swiftui-style-unify/SKILL.md) — 五环工作流的 Swift 形态（从这里开始）
+  - [scripts/](skills/swiftui-style-unify/scripts/) — ripgrep MUST-NOT 门禁（fail-fast，绝不假绿）
+  - [assets/](skills/swiftui-style-unify/assets/) — DesignTokens / EvairTextStyle / Theme Swift 模板
+  - [references/](skills/swiftui-style-unify/references/) — token 解剖、主题与组件、同步代码生成、门禁与坑
 
 
 按需创建 `scripts/`、`assets/` 子目录即可，并非每个技能都需要。

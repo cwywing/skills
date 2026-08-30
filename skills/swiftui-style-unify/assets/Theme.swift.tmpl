@@ -1,0 +1,69 @@
+//  Theme.swift — 模板（Environment 注入）
+//  轻量主题容器：为未来 white-label / 高对比度预留整体替换点。
+//  注意取舍（见 skill references/theme-and-components.md）：
+//  Feature 代码今天仍直接读 DesignTokens.*；本容器是"以后能换"的管道，
+//  不是每个视图都要付出的间接层。仅当"运行时切换主题"成为真实需求时，
+//  才升级为社区文章那种全量 Environment 解析架构。
+//
+//  Motion 一并给出：跨端项目把 web SoT 的 cubic-bezier 原样移植；
+//  shimmer 保持 linear（它是加载循环，不是 UI 过渡 — 例外要写下来）。
+
+import SwiftUI
+
+struct AppTheme: Sendable {
+    static let shared = AppTheme()
+    var colors: ColorTokens.Type { ColorTokens.self }
+    var typography: TypographyTokens.Type { TypographyTokens.self }
+    var spacing: SpacingTokens.Type { SpacingTokens.self }
+    var radius: RadiusTokens.Type { RadiusTokens.self }
+}
+
+private struct AppThemeKey: EnvironmentKey {
+    static let defaultValue = AppTheme.shared
+}
+
+extension EnvironmentValues {
+    var appTheme: AppTheme {
+        get { self[AppThemeKey.self] }
+        set { self[AppThemeKey.self] = newValue }
+    }
+}
+
+extension View {
+    /// 屏幕根修饰符：背景 + 默认前景色一次到位，不可能只应用一半。
+    func appScreenBackground() -> some View {
+        background(DesignTokens.Colors.appBackground.ignoresSafeArea())
+            .foregroundStyle(DesignTokens.Colors.appText)
+    }
+}
+
+// ---------- MotionTokens（跨端曲线移植） ----------
+
+enum MotionTokens {
+    /// web SoT 曲线 cubic-bezier(0.22, 1, 0.36, 1) — 原样移植，不再另定。
+    private static let easeOutControlPoints: (CGFloat, CGFloat, CGFloat, CGFloat) = (0.22, 1, 0.36, 1)
+
+    /// 按压/聚焦微交互。略高于 web 的 0.15s：过短时长下曲线不可感知。
+    static let durationFast: Double = 0.2
+    /// 标准内容过渡。
+    static let durationNormal: Double = 0.25
+    /// 骨架屏闪烁周期。
+    static let durationShimmer: Double = 1.2
+
+    static var easeOutFast: Animation {
+        .timingCurve(easeOutControlPoints.0, easeOutControlPoints.1,
+                     easeOutControlPoints.2, easeOutControlPoints.3,
+                     duration: durationFast)
+    }
+
+    static var easeInOutNormal: Animation {
+        .timingCurve(easeOutControlPoints.0, easeOutControlPoints.1,
+                     easeOutControlPoints.2, easeOutControlPoints.3,
+                     duration: durationNormal)
+    }
+
+    /// linear 是有意的例外：加载循环不是 UI 过渡。
+    static var linearShimmer: Animation {
+        .linear(duration: durationShimmer).repeatForever(autoreverses: false)
+    }
+}

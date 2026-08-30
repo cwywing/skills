@@ -71,7 +71,10 @@ Practical shape: SoT stays a plain-CSS file of custom properties imported by App
 
 ## Mode D — Cross-end shared SoT + codegen (EvairSIM pattern)
 
-When H5 and native apps must not drift, ONE web file is the SoT for every platform:
+When H5 and native apps must not drift, ONE web file is the SoT for every platform. The
+Swift/SwiftUI side of this mode (token layer, ColorTokens, colorset registration, CI diff)
+has its own skill — **`swiftui-style-unify`**; this file owns the web side and the sync
+contract.
 
 ```
 ../h5/src/styles.css          SoT: :root + .dark, OKLCH custom properties

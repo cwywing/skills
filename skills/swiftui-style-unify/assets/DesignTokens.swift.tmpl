@@ -1,0 +1,75 @@
+//  DesignTokens.swift — 模板
+//  Token 层统一入口。Feature 代码只引用 `DesignTokens.*`，不直接引用 *Tokens 类型
+//  （门禁会拦 Features 里的裸 MetricsTokens 等引用）。
+//
+//  配套文件（见 skill references/swift-tokens.md）：
+//    ColorTokens.swift   — 全项目唯一允许 Color("AssetName") 的文件
+//    SpacingTokens / RadiusTokens / ShadowTokens / MetricsTokens / MotionTokens
+//    EvairTextStyle.swift + TypographyTokens.swift（薄别名层）
+
+import SwiftUI
+
+enum DesignTokens {
+    typealias Colors = ColorTokens
+    typealias Typography = TypographyTokens
+    typealias Spacing = SpacingTokens
+    typealias Radius = RadiusTokens
+    typealias Shadow = ShadowTokens
+    typealias Metrics = MetricsTokens
+    typealias Motion = MotionTokens
+}
+
+// ---------- ColorTokens（示例骨架，按语义分组补全） ----------
+// 值来自 Assets.xcassets 的 colorset（Any + Dark 双外观）；此处是纯语义索引。
+
+enum ColorTokens {
+    // MARK: Brand
+    static let brandPrimary = Color("BrandPrimary")
+    static let brandPrimaryForeground = Color("BrandPrimaryForeground")
+    static let ring = Color("Ring")
+
+    // MARK: Surfaces（按应用外壳/全局表面分组，对齐你的 web SoT 语义族）
+    static let appBackground = Color("AppBackground")
+    static let appCard = Color("AppCard")
+    static let appBorder = Color("AppBorder")
+    static let appText = Color("AppText")
+    static let appTextMuted = Color("AppTextMuted")
+
+    // MARK: Feedback（主色 + 成对 *Background 浅底 ≈ H5 状态四件套）
+    static let success = Color("AppSuccess")
+    static let successBackground = Color("AppSuccessBackground")
+    static let warning = Color("AppWarning")
+    static let warningBackground = Color("AppWarningBackground")
+    static let danger = Color("AppDanger")
+    static let dangerBackground = Color("AppDangerBackground")
+    static let info = Color("AppInfo")
+    static let infoBackground = Color("AppInfoBackground")
+}
+
+// ---------- Spacing / Radius / Metrics（4pt 网格骨架） ----------
+
+enum SpacingTokens {
+    static let none: CGFloat = 0
+    static let xxxs: CGFloat = 2
+    static let xxs: CGFloat = 4
+    static let xs: CGFloat = 8
+    static let sm: CGFloat = 12
+    static let md: CGFloat = 16
+    static let lg: CGFloat = 24
+    static let xl: CGFloat = 32
+}
+
+enum RadiusTokens {
+    static let input: CGFloat = 8
+    static let card: CGFloat = 14
+    static let panel: CGFloat = 20
+}
+
+enum MetricsTokens {
+    static let leadingIconSize: CGFloat = 20
+    static let thumbnailSize: CGFloat = 56
+}
+
+// ---------- 验收页目录（每个 token 族都带 catalog，验收页据此渲染） ----------
+// struct ColorSwatch: Identifiable { let id, name: String; let color: Color; let sotVariable: String }
+// extension ColorTokens { static let catalog: [ColorSwatch] = [ …携带 SoT 变量名，双向可 grep… ] }

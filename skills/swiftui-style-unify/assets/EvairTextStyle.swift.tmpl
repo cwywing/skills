@@ -1,0 +1,88 @@
+//  EvairTextStyle.swift — 模板
+//  完整排版 token：font / weight / design / lineHeight / tracking / Dynamic Type 策略。
+//  一个修饰符应用：.textStyle(DesignTokens.Typography.bodyMedium)
+//  规则：relative 为默认；fixed 仅用于 display/hero 尺寸（显式例外）。
+//  tracking 从 web SoT 的 em 换算：size × em（如标题 -0.025em）。
+
+import SwiftUI
+
+enum DynamicTypePolicy: Sendable {
+    /// 固定字号 — 仅 display/hero；不随系统字号缩放，慎用。
+    case fixed
+    /// 跟随系统 TextStyle 曲线缩放 — 正文/标签/按钮的默认选择。
+    case relative(Font.TextStyle)
+}
+
+struct TextStyle: Sendable {
+    let name: String
+    let policy: DynamicTypePolicy
+    let size: CGFloat
+    let weight: Font.Weight
+    let design: Font.Design
+    /// 目标行高（pt）。SwiftUI lineSpacing = lineHeight - size。
+    let lineHeight: CGFloat
+    /// 字距（pt），来自 web em × size。
+    let tracking: CGFloat
+
+    var font: Font {
+        switch policy {
+        case .fixed:
+            .system(size: size, weight: weight, design: design)
+        case .relative(let textStyle):
+            .system(textStyle, design: design).weight(weight)
+        }
+    }
+
+    var lineSpacing: CGFloat { max(0, lineHeight - size) }
+}
+
+extension View {
+    func textStyle(_ style: TextStyle) -> some View {
+        font(style.font)
+            .tracking(style.tracking)
+            .lineSpacing(style.lineSpacing)
+    }
+}
+
+// ---------- Catalog（H5/web 对齐） ----------
+// 命名：尺寸网格名(display/headline/body/label × L/M/S) + 用途语义名(caption/price/button)。
+// Feature 代码优先用用途语义名；尺寸网格名留给 token 层。
+
+enum TextStyles {
+    private static let headingTrackingEm: CGFloat = -0.025
+
+    static let displayMedium = TextStyle(
+        name: "displayMedium", policy: .fixed, size: 28, weight: .bold, design: .default,
+        lineHeight: 34, tracking: 28 * headingTrackingEm)
+
+    static let headlineSmall = TextStyle(
+        name: "headlineSmall", policy: .relative(.headline), size: 17, weight: .semibold, design: .default,
+        lineHeight: 22, tracking: 17 * headingTrackingEm)
+
+    static let bodyMedium = TextStyle(
+        name: "bodyMedium", policy: .relative(.subheadline), size: 15, weight: .regular, design: .default,
+        lineHeight: 22, tracking: 0)
+
+    static let labelMedium = TextStyle(
+        name: "labelMedium", policy: .relative(.footnote), size: 13, weight: .medium, design: .default,
+        lineHeight: 18, tracking: 0)
+
+    static let caption = TextStyle(
+        name: "caption", policy: .relative(.caption), size: 12, weight: .regular, design: .default,
+        lineHeight: 16, tracking: 0)
+
+    static let button = TextStyle(
+        name: "button", policy: .relative(.body), size: 17, weight: .semibold, design: .default,
+        lineHeight: 22, tracking: 0)
+
+    /// 验收页回归用全量清单 — 不在 catalog 里的样式不可审查。
+    static let catalog: [TextStyle] = [.displayMedium, .headlineSmall, .bodyMedium, .labelMedium, .caption, .button]
+}
+
+// TypographyTokens.swift（薄别名，使 DesignTokens.Typography.* 返回完整样式对象）：
+//   enum TypographyTokens {
+//       typealias Style = TextStyle
+//       static let bodyMedium = TextStyles.bodyMedium
+//       // …
+//       static let catalog = TextStyles.catalog
+//   }
