@@ -13,8 +13,9 @@
 | [geo-article-generator](skills/geo-article-generator/) | 把提供的素材资料落地成一篇可被生成式 AI 引擎识别、理解并引用的文章 |
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | 把计划拆成有序任务，用 Cursor Agent CLI（`agent -p --force`）持续交付 |
 | [admin-console-ux](skills/admin-console-ux/) | 优化管理后台交互与显示，对齐主流中后台**运维使用习惯** |
+| [h5-style-unify](skills/h5-style-unify/) | 统一**既有** H5 / 移动端项目的风格配色设计 — token 真相源、机器门禁、验收页，双案例交叉验证 |
 
-两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent 啃完）时，用 **ai-dev-pipeline**。需要按运维习惯整站走查并统一后台 UX 时，用 **admin-console-ux**。
+两者可组合使用：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring** 将重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用 **geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent 啃完）时，用 **ai-dev-pipeline**。需要按运维习惯整站走查并统一后台 UX 时，用 **admin-console-ux**。需要把既有 H5/移动端代码库的配色样式收敛到单一 token 源并加 lint 门禁时，用 **h5-style-unify**。
 
 
 ## 安装
@@ -36,6 +37,7 @@ cp -r skills/skill-authoring        /path/to/project/.cursor/skills/skill-author
 cp -r skills/geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.cursor/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-console-ux
+cp -r skills/h5-style-unify         /path/to/project/.cursor/skills/h5-style-unify
 
 # Claude Code
 cp -r skills/harness-first          /path/to/project/.claude/skills/harness-first
@@ -43,6 +45,7 @@ cp -r skills/skill-authoring        /path/to/project/.claude/skills/skill-author
 cp -r skills/geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.claude/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.claude/skills/admin-console-ux
+cp -r skills/h5-style-unify         /path/to/project/.claude/skills/h5-style-unify
 ```
 
 
@@ -65,7 +68,8 @@ skills/                          # 仓库根目录
     ├── skill-authoring/
     ├── geo-article-generator/
     ├── ai-dev-pipeline/
-    └── admin-console-ux/
+    ├── admin-console-ux/
+    └── h5-style-unify/
 ```
 
 - [harness-first/](skills/harness-first/) — 五阶段门控式项目启动
@@ -85,6 +89,11 @@ skills/                          # 仓库根目录
 - [admin-console-ux/](skills/admin-console-ux/) — 中后台运维 UX / 整站走查
   - [SKILL.md](skills/admin-console-ux/SKILL.md) — 主工作流（从这里开始）
   - [references/](skills/admin-console-ux/references/) — 运维习惯、验收清单、通病对比
+- [h5-style-unify/](skills/h5-style-unify/) — H5/移动端风格配色统一
+  - [SKILL.md](skills/h5-style-unify/SKILL.md) — 五环工作流（从这里开始）
+  - [scripts/](skills/h5-style-unify/scripts/) — fail-closed 样式审计脚本（零依赖）
+  - [assets/](skills/h5-style-unify/assets/) — theme.css / stylelint / 验收页模板
+  - [references/](skills/h5-style-unify/references/) — token 分类法、技术栈适配、门禁配置、坑清单、案例对照
 
 
 按需创建 `scripts/`、`assets/` 子目录即可，并非每个技能都需要。

@@ -1,0 +1,17 @@
+{
+  "rules": {
+    "color-no-hex": [
+      true,
+      {
+        "severity": "error",
+        "message": "禁止裸写 hex 颜色，请使用 theme.css 中的 CSS 变量（var(--color-*)）。如需新增色值，先在 theme.css 登记。"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["**/*.vue"],
+      "customSyntax": "postcss-html"
+    }
+  ]
+}

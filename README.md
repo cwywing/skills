@@ -15,13 +15,16 @@ or import via Cursor's **Remote Rule (GitHub)**.
 | [geo-article-generator](skills/geo-article-generator/) | Turning supplied source materials into a publishable article that generative AI engines can identify, understand, and cite |
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | Splitting a plan into ordered tasks and continuously delivering via Cursor Agent CLI (`agent -p --force`) |
 | [admin-console-ux](skills/admin-console-ux/) | Polishing admin / 管理后台 UX so display and interaction match mid-console **ops habits** |
+| [h5-style-unify](skills/h5-style-unify/) | Unifying style/color/design for an **existing** H5 / mobile-web project — token SoT, machine gate, acceptance page, cross-validated |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
 **skill-authoring** once the harness is running. Use **geo-article-generator**
 whenever content needs to be legible to generative AI search, not just human readers.
 Use **ai-dev-pipeline** when a PRD or plan should become a multi-task CLI delivery
 loop instead of one giant agent run. Use **admin-console-ux** when an ops console
-needs a full-page walkthrough against mainstream mid-console habits.
+needs a full-page walkthrough against mainstream mid-console habits. Use
+**h5-style-unify** when an existing H5/mobile-web codebase needs its colors and
+styles converged into one token source with a lint gate.
 
 
 ## Install
@@ -43,6 +46,7 @@ cp -r skills/skill-authoring        /path/to/project/.cursor/skills/skill-author
 cp -r skills/geo-article-generator  /path/to/project/.cursor/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.cursor/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-console-ux
+cp -r skills/h5-style-unify         /path/to/project/.cursor/skills/h5-style-unify
 
 # Claude Code
 cp -r skills/harness-first          /path/to/project/.claude/skills/harness-first
@@ -50,6 +54,7 @@ cp -r skills/skill-authoring        /path/to/project/.claude/skills/skill-author
 cp -r skills/geo-article-generator  /path/to/project/.claude/skills/geo-article-generator
 cp -r skills/ai-dev-pipeline        /path/to/project/.claude/skills/ai-dev-pipeline
 cp -r skills/admin-console-ux       /path/to/project/.claude/skills/admin-console-ux
+cp -r skills/h5-style-unify         /path/to/project/.claude/skills/h5-style-unify
 ```
 
 
@@ -73,7 +78,8 @@ skills/                          # repo root
     ├── skill-authoring/
     ├── geo-article-generator/
     ├── ai-dev-pipeline/
-    └── admin-console-ux/
+    ├── admin-console-ux/
+    └── h5-style-unify/
 ```
 
 - [harness-first/](skills/harness-first/) — 5-phase gated project bootstrap
@@ -93,6 +99,11 @@ skills/                          # repo root
 - [admin-console-ux/](skills/admin-console-ux/) — mid-console ops UX / walkthrough
   - [SKILL.md](skills/admin-console-ux/SKILL.md) — main workflow (start here)
   - [references/](skills/admin-console-ux/references/) — ops habits, acceptance, anti-patterns
+- [h5-style-unify/](skills/h5-style-unify/) — H5/mobile-web style & color unification
+  - [SKILL.md](skills/h5-style-unify/SKILL.md) — five-ring workflow (start here)
+  - [scripts/](skills/h5-style-unify/scripts/) — fail-closed style audit (zero deps)
+  - [assets/](skills/h5-style-unify/assets/) — theme.css / stylelint / acceptance-page templates
+  - [references/](skills/h5-style-unify/references/) — token taxonomy, stack adapters, gate configs, pitfalls, case studies
 
 
 Optional subdirectories (`scripts/`, `assets/`) are created per-skill when needed —

@@ -1,0 +1,126 @@
+<script setup>
+/**
+ * 设计系统验收页（模板 · Vue3）— 对照 skill 的 references/pitfalls-and-audit.md
+ *
+ * 约定：
+ *  1. 仅 dev 可达：路由注册包在 import.meta.env.DEV 里（见下方注释），生产构建不含。
+ *  2. 色块一律用 var(--token) 渲染 —— 展示的就是运行时真实值，不是抄录。
+ *  3. 每新增一个封装组件，必须在组件矩阵登记（未登记 = 审查不可见）。
+ *  4. 本页只列 token 名，不列色值 —— 文档/页面都是 SoT 的投影。
+ *
+ * 路由注册（main.js / router）：
+ *   ...(import.meta.env.DEV
+ *     ? [{ path: '/_design-system', name: 'design-system',
+ *          component: () => import('./views/_DesignSystem.vue') }]
+ *     : []),
+ */
+
+// 颜色 token 清单 —— 与 theme.css 的分组保持同名同步（只增删名字，不抄值）
+const colorTokens = [
+  { group: '品牌色', items: ['--color-primary', '--color-primary-dark', '--color-primary-soft', '--color-primary-softer'] },
+  { group: '成功', items: ['--color-success', '--color-success-text', '--color-success-soft', '--color-success-border'] },
+  { group: '警告', items: ['--color-warning', '--color-warning-text', '--color-warning-soft', '--color-warning-border'] },
+  { group: '危险', items: ['--color-danger', '--color-danger-text', '--color-danger-soft', '--color-danger-border'] },
+  { group: '渠道·微信', items: ['--color-wecom', '--color-wecom-soft'] },
+  { group: '文字', items: ['--color-text', '--color-text-secondary', '--color-text-secondary-strong', '--color-text-muted', '--color-text-on-primary'] },
+  { group: '背景/边框', items: ['--color-bg-page', '--color-bg-card', '--color-bg-muted', '--color-bg-subtle', '--color-bg-footer', '--color-border'] },
+  { group: 'Hero 渐变', items: ['--color-hero-from', '--color-hero-to', '--color-hero-3'] },
+]
+
+const fsTokens = [
+  ['--fs-caption', '12px 说明'], ['--fs-sm', '13px 辅助'], ['--fs-base', '14px 正文'],
+  ['--fs-md', '15px'], ['--fs-lg', '16px 小标题'], ['--fs-xl', '17px 导航'],
+  ['--fs-2xl', '20px'], ['--fs-3xl', '22px'], ['--fs-hero', '28px Hero'],
+]
+
+const spaceTokens = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-5', '--space-6', '--space-8', '--space-12']
+const radiusTokens = ['--radius-sm', '--radius-md', '--radius-lg', '--radius-pill']
+
+// 组件矩阵 —— tone × variant；换成你项目里的语义组件后按需扩展
+// import AppStatusTag from '../components/ui/AppStatusTag.vue'
+const statusMatrix = [
+  { tone: 'success', label: '已通过' },
+  { tone: 'warning', label: '候补中' },
+  { tone: 'danger', label: '已驳回' },
+  { tone: 'primary', label: '待审核' },
+  { tone: 'info', label: '信息' },
+]
+</script>
+
+<template>
+  <div class="ds-page">
+    <header class="ds-header">
+      <h1>设计系统验收</h1>
+      <p class="ds-sub">theme.css 是唯一真相源 · 本页仅 dev 可达 · 冲突时以 theme.css 源码为准</p>
+    </header>
+
+    <section v-for="cat in colorTokens" :key="cat.group" class="ds-section">
+      <h2>{{ cat.group }}</h2>
+      <div class="ds-swatch-row">
+        <div v-for="t in cat.items" :key="t" class="ds-swatch">
+          <div class="ds-swatch-color" :style="{ background: `var(${t})` }" />
+          <code>{{ t }}</code>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2>字号阶梯</h2>
+      <div class="ds-fs-row" v-for="[t, label] in fsTokens" :key="t">
+        <span class="ds-fs-sample" :style="{ fontSize: `var(${t})` }">示例文字 Ag</span>
+        <code>{{ t }}</code>
+        <span class="ds-fs-label">{{ label }}</span>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2>间距阶梯</h2>
+      <div class="ds-space-row">
+        <div v-for="t in spaceTokens" :key="t" class="ds-space">
+          <div class="ds-space-bar" :style="{ width: `var(${t})` }" />
+          <code>{{ t }}</code>
+        </div>
+      </div>
+    </section>
+
+    <section class="ds-section">
+      <h2>圆角阶梯</h2>
+      <div class="ds-swatch-row">
+        <div v-for="t in radiusTokens" :key="t" class="ds-swatch">
+          <div class="ds-radius-box" :style="{ borderRadius: `var(${t})` }" />
+          <code>{{ t }}</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- 组件矩阵：换成项目语义组件后启用
+    <section class="ds-section">
+      <h2>状态徽章矩阵（AppStatusTag）</h2>
+      <div class="ds-matrix">
+        <template v-for="row in statusMatrix" :key="row.tone">
+          <AppStatusTag :tone="row.tone" variant="soft">{{ row.label }}</AppStatusTag>
+          <AppStatusTag :tone="row.tone" variant="solid">{{ row.label }}</AppStatusTag>
+        </template>
+      </div>
+    </section>
+    -->
+  </div>
+</template>
+
+<style scoped>
+.ds-page { max-width: 430px; margin: 0 auto; padding: 24px 16px 48px; background: var(--color-bg-page); min-height: 100vh; }
+.ds-header h1 { margin: 0; font-size: var(--fs-title-hero); color: var(--color-text); }
+.ds-sub { margin: 8px 0 0; font-size: var(--fs-hint); color: var(--color-text-secondary); }
+.ds-section { margin-top: 24px; }
+.ds-section h2 { font-size: var(--fs-lg); color: var(--color-text); margin: 0 0 12px; }
+.ds-swatch-row { display: flex; flex-wrap: wrap; gap: 12px; }
+.ds-swatch { display: flex; flex-direction: column; gap: 4px; width: 96px; }
+.ds-swatch-color { height: 48px; border-radius: var(--radius-sm); border: 1px solid var(--color-border); }
+.ds-swatch code, .ds-fs-row code, .ds-space code { font-size: var(--fs-caption); color: var(--color-text-secondary); }
+.ds-fs-row { display: flex; align-items: baseline; gap: 12px; padding: 4px 0; }
+.ds-fs-sample { color: var(--color-text); }
+.ds-fs-label { font-size: var(--fs-caption); color: var(--color-text-muted); }
+.ds-space { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
+.ds-space-bar { height: 12px; background: var(--color-primary-soft); border: 1px solid var(--color-primary); }
+.ds-radius-box { height: 48px; background: var(--color-primary-soft); border: 1px solid var(--color-primary); }
+</style>
