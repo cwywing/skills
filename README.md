@@ -15,7 +15,7 @@ or import via Cursor's **Remote Rule (GitHub)**.
 | [geo-article-generator](skills/geo-article-generator/) | Turning supplied source materials into a publishable article that generative AI engines can identify, understand, and cite |
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | Splitting a plan into ordered tasks and continuously delivering via Cursor Agent CLI (`agent -p --force`) |
 | [admin-console-ux](skills/admin-console-ux/) | Polishing admin / 管理后台 UX so display and interaction match mid-console **ops habits** |
-| [h5-style-unify](skills/h5-style-unify/) | Unifying style/color/design for an **existing** H5 / mobile-web project — token SoT, machine gate, acceptance page, cross-validated |
+| [h5-style-unify](skills/h5-style-unify/) | Unifying style/color/design for an **existing** H5 / mobile-web project — token SoT, machine gate, acceptance page |
 | [swiftui-style-unify](skills/swiftui-style-unify/) | The same five-ring unification for an **existing** SwiftUI / iOS app — `DesignTokens` namespace, Dynamic Type typography, ripgrep gate, shared-SoT codegen |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
@@ -112,8 +112,8 @@ skills/                          # repo root
   - [references/](skills/h5-style-unify/references/) — token taxonomy, stack adapters, gate configs, pitfalls, case studies
 - [swiftui-style-unify/](skills/swiftui-style-unify/) — SwiftUI/iOS style & color unification
   - [SKILL.md](skills/swiftui-style-unify/SKILL.md) — five-ring workflow, Swift-shaped (start here)
-  - [scripts/](skills/swiftui-style-unify/scripts/) — ripgrep MUST-NOT gate (fail-fast, never fake-green)
-  - [assets/](skills/swiftui-style-unify/assets/) — DesignTokens / EvairTextStyle / Theme Swift templates
+  - [scripts/](skills/swiftui-style-unify/scripts/) — ripgrep MUST-NOT gate (fail-closed; reports every rule) + `sync-design-tokens.mjs`
+  - [assets/](skills/swiftui-style-unify/assets/) — DesignTokens / TextStyle / Theme / Preview Swift templates + `color-map.json.tmpl`
   - [references/](skills/swiftui-style-unify/references/) — token anatomy, theme & components, sync codegen, gate & pitfalls
 
 
