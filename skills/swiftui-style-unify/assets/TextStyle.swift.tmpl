@@ -1,4 +1,4 @@
-//  EvairTextStyle.swift — 模板
+//  TextStyle.swift — 模板
 //  完整排版 token：font / weight / design / lineHeight / tracking / Dynamic Type 策略。
 //  一个修饰符应用：.textStyle(DesignTokens.Typography.bodyMedium)
 //  规则：relative 为默认；fixed 仅用于 display/hero 尺寸（显式例外）。
@@ -44,10 +44,6 @@ extension View {
     }
 }
 
-// ---------- Catalog（H5/web 对齐） ----------
-// 命名：尺寸网格名(display/headline/body/label × L/M/S) + 用途语义名(caption/price/button)。
-// Feature 代码优先用用途语义名；尺寸网格名留给 token 层。
-
 enum TextStyles {
     private static let headingTrackingEm: CGFloat = -0.025
 
@@ -79,10 +75,14 @@ enum TextStyles {
     static let catalog: [TextStyle] = [.displayMedium, .headlineSmall, .bodyMedium, .labelMedium, .caption, .button]
 }
 
-// TypographyTokens.swift（薄别名，使 DesignTokens.Typography.* 返回完整样式对象）：
-//   enum TypographyTokens {
-//       typealias Style = TextStyle
-//       static let bodyMedium = TextStyles.bodyMedium
-//       // …
-//       static let catalog = TextStyles.catalog
-//   }
+/// 薄别名，使 DesignTokens.Typography.* 返回完整样式对象。
+enum TypographyTokens {
+    typealias Style = TextStyle
+    static let displayMedium = TextStyles.displayMedium
+    static let headlineSmall = TextStyles.headlineSmall
+    static let bodyMedium = TextStyles.bodyMedium
+    static let labelMedium = TextStyles.labelMedium
+    static let caption = TextStyles.caption
+    static let button = TextStyles.button
+    static let catalog = TextStyles.catalog
+}

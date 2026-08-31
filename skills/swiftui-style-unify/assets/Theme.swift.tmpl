@@ -35,6 +35,11 @@ extension View {
         background(DesignTokens.Colors.appBackground.ignoresSafeArea())
             .foregroundStyle(DesignTokens.Colors.appText)
     }
+
+    /// SF Symbol 尺寸走 Metrics，不要用 .textStyle（会把 lineHeight/tracking 塞进图片）。
+    func symbolSize(_ size: CGFloat) -> some View {
+        font(.system(size: size))
+    }
 }
 
 // ---------- MotionTokens（跨端曲线移植） ----------

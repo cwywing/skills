@@ -1,0 +1,51 @@
+//  DesignSystemPreviewView.swift — DEBUG 验收页模板
+//  仅 DEBUG 编译；用 catalog 渲染运行时真实值，不抄色值/字号。
+//  每个新封装组件必须在本页登记（未登记 = 审查不可见）。
+//  路由：#if DEBUG 下加一个 Design tab / hidden debug 入口。
+
+import SwiftUI
+
+#if DEBUG
+struct DesignSystemPreviewView: View {
+    var body: some View {
+        NavigationStack {
+            List {
+                Section("Colors") {
+                    ForEach(ColorTokens.catalog) { swatch in
+                        HStack(spacing: DesignTokens.Spacing.sm) {
+                            swatch.color
+                                .frame(width: DesignTokens.Metrics.leadingIconSize,
+                                       height: DesignTokens.Metrics.leadingIconSize)
+                                .clipShape(RoundedRectangle(cornerRadius: DesignTokens.Radius.input))
+                            VStack(alignment: .leading, spacing: DesignTokens.Spacing.xxxs) {
+                                Text(swatch.name).textStyle(DesignTokens.Typography.labelMedium)
+                                if !swatch.sotVariable.isEmpty {
+                                    Text(swatch.sotVariable).textStyle(DesignTokens.Typography.caption)
+                                        .foregroundStyle(DesignTokens.Colors.appTextMuted)
+                                }
+                            }
+                        }
+                    }
+                }
+                Section("Typography") {
+                    ForEach(TypographyTokens.catalog, id: \.name) { style in
+                        Text(style.name).textStyle(style)
+                    }
+                }
+                // 组件矩阵：换成项目语义组件后取消注释
+                // Section("Badge") {
+                //     ForEach(AppBadgeTone.allCases, id: \.self) { tone in
+                //         AppBadge(tone: tone, text: String(describing: tone))
+                //     }
+                // }
+            }
+            .navigationTitle("Design System")
+        }
+        .appScreenBackground()
+    }
+}
+
+#Preview("Design System") {
+    DesignSystemPreviewView()
+}
+#endif

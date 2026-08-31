@@ -1,11 +1,12 @@
 //  DesignTokens.swift — 模板
-//  Token 层统一入口。Feature 代码只引用 `DesignTokens.*`，不直接引用 *Tokens 类型
-//  （门禁会拦 Features 里的裸 MetricsTokens 等引用）。
+//  Token 层统一入口。业务视图只引用 `DesignTokens.*`，不直接引用 *Tokens 类型
+//  （门禁会拦视图层里的裸 MetricsTokens 等引用）。
 //
 //  配套文件（见 skill references/swift-tokens.md）：
-//    ColorTokens.swift   — 全项目唯一允许 Color("AssetName") 的文件
-//    SpacingTokens / RadiusTokens / ShadowTokens / MetricsTokens / MotionTokens
-//    EvairTextStyle.swift + TypographyTokens.swift（薄别名层）
+//    ColorTokens.swift   — 全项目唯一允许 Color("AssetName") 的文件（本模板内含骨架）
+//    TextStyle.swift     — 排版对象 + TypographyTokens 薄别名
+//    Theme.swift         — Environment 容器 + MotionTokens
+//    Spacing / Radius / Shadow / Metrics 骨架在本文件
 
 import SwiftUI
 
@@ -22,13 +23,20 @@ enum DesignTokens {
 // ---------- ColorTokens（示例骨架，按语义分组补全） ----------
 // 值来自 Assets.xcassets 的 colorset（Any + Dark 双外观）；此处是纯语义索引。
 
+struct ColorSwatch: Identifiable {
+    let id: String
+    let name: String
+    let color: Color
+    let sotVariable: String
+}
+
 enum ColorTokens {
     // MARK: Brand
     static let brandPrimary = Color("BrandPrimary")
     static let brandPrimaryForeground = Color("BrandPrimaryForeground")
     static let ring = Color("Ring")
 
-    // MARK: Surfaces（按应用外壳/全局表面分组，对齐你的 web SoT 语义族）
+    // MARK: Surfaces
     static let appBackground = Color("AppBackground")
     static let appCard = Color("AppCard")
     static let appBorder = Color("AppBorder")
@@ -44,9 +52,15 @@ enum ColorTokens {
     static let dangerBackground = Color("AppDangerBackground")
     static let info = Color("AppInfo")
     static let infoBackground = Color("AppInfoBackground")
-}
 
-// ---------- Spacing / Radius / Metrics（4pt 网格骨架） ----------
+    /// 验收页目录。sotVariable 填对应 web SoT 变量名，双向可 grep；无 web 端则留空。
+    static let catalog: [ColorSwatch] = [
+        .init(id: "brandPrimary", name: "Brand Primary", color: brandPrimary, sotVariable: "--color-primary"),
+        .init(id: "success", name: "Success", color: success, sotVariable: "--color-success"),
+        .init(id: "warning", name: "Warning", color: warning, sotVariable: "--color-warning"),
+        .init(id: "danger", name: "Danger", color: danger, sotVariable: "--color-danger"),
+    ]
+}
 
 enum SpacingTokens {
     static let none: CGFloat = 0
@@ -70,6 +84,7 @@ enum MetricsTokens {
     static let thumbnailSize: CGFloat = 56
 }
 
-// ---------- 验收页目录（每个 token 族都带 catalog，验收页据此渲染） ----------
-// struct ColorSwatch: Identifiable { let id, name: String; let color: Color; let sotVariable: String }
-// extension ColorTokens { static let catalog: [ColorSwatch] = [ …携带 SoT 变量名，双向可 grep… ] }
+enum ShadowTokens {
+    static let cardRadius: CGFloat = 16
+    static let cardY: CGFloat = 4
+}
