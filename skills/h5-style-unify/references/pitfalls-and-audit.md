@@ -1,71 +1,66 @@
 # Pitfalls, Audit Table & Acceptance Checklist
 
-Every item below was observed in a production codebase, not theorized. Read before Phase 6; check
-against during Phases 2–5.
+Every item below was observed in a production codebase, not theorized. Read before P6; check
+against during P2–P5.
 
-## Pitfall list (cross-validated)
+## Pitfall list
 
 | # | Pitfall | How it manifested | Countermeasure |
 | --- | --- | --- | --- |
-| 1 | **Gate false-green** | design lint silently passed every rule when ripgrep was absent (CI + local Macs) | deps checked up front, fail fast; gate self-test observes an actual failure |
-| 2 | **customSyntax top-level** | plain `.css` violations stopped matching while `.vue` still caught — gate looked alive | `postcss-html` only inside `overrides` scoped to `**/*.vue` |
-| 3 | **rgba blind spot** | `color-no-hex` green, yet `drop-shadow(… rgba(0,0,0,0.12))` shipped in business code | audit script / CI grep for literal rgba·hsl outside SoT |
-| 4 | **Semantic dual-caliber** | "warning text" used `--color-warning` in one file, `--color-warning-text` in another — tokenized but still two colors | one intent → one token; converge during component migration |
-| 5 | **Channel/status aliasing** | "approved" badge colored WeChat green `#07c160` (channel) instead of business `success`; fix changed visible pixels | channel colors are their own semantic family, never aliased to status |
-| 6 | **Second SoT drift** | a parallel `tokens.js` drifted from `theme.css`; docs tempted to copy color tables | one SoT file; docs are indexes; duplicates get deleted, not synced |
-| 7 | **Order violation** | components merged while the gate was untrusted — enforcement came later and retrofitted poorly | gate credible FIRST, then scale the component library |
-| 8 | **Day-one strictness** | enabling many lint rules at once drowns history; the gate gets disabled | exactly one rule to start; tighten on a schedule, not on ambition |
-| 9 | **Hex museum** | precise variants (`-softer`, `-vivid`, …) accumulated beyond need | each variant carries a "used by" comment; periodic merge audit |
-| 10 | **Skeleton components mistaken for adoption** | `AppButton` existed + passed review, zero business usage | acceptance page matrix + per-component adoption counts in the audit table |
-| 11 | **Acceptance page in prod** | — (avoided by contract) | dev-only route registration (`import.meta.env.DEV` / DEBUG flag); verify absent from the prod build |
-| 12 | **Inline-style escape hatch** | `style="color:#…"` in templates bypasses `<style>`-scoped lint | audit script scans template attributes; custom-property bindings (`:style="{'--i':i}"`) are fine |
-| 13 | **Cross-end drift** | native colors edited directly; H5 retheme invisible to iOS | SoT + codegen + CI diff on regenerated artifacts (Mode D) |
-| 14 | **Hooks mistaken for enforcement** | pre-commit is local and bypassable | CI is the durable layer; hooks are convenience |
+| 1 | **Gate false-green** | lint passed every rule when the tool (ripgrep / misconfigured stylelint) was absent or parsing the wrong syntax | deps checked up front; gate self-test observes an actual failure |
+| 2 | **customSyntax top-level** | plain `.css` violations stopped matching while `.vue` still caught | `postcss-html` only inside `overrides` scoped to `**/*.vue` |
+| 3 | **rgba blind spot** | `color-no-hex` green, yet `drop-shadow(… rgba(0,0,0,0.12))` shipped | audit script flags literal rgba·hsl outside SoT |
+| 4 | **Semantic dual-caliber** | "warning text" used two different tokens in different files | one intent → one token |
+| 5 | **Channel/status aliasing** | "approved" badge used a channel green instead of business `success`; fix changed pixels | channel colors are their own family, never aliased to status |
+| 6 | **Second SoT drift** | a parallel `tokens.js` drifted from `theme.css` | one SoT file; docs are indexes; duplicates get deleted |
+| 7 | **Order violation** | components merged while the gate was untrusted | P3 gate self-test BEFORE P5 components |
+| 8 | **Day-one strictness** | many lint rules at once; the gate gets disabled | exactly one rule to start |
+| 9 | **Hex museum** | precise variants (`-softer`, `-vivid`) accumulated | each variant carries a "used by" comment |
+| 10 | **Skeleton components mistaken for adoption** | `AppButton` existed, zero business usage | acceptance matrix + adoption counts |
+| 11 | **Acceptance page in prod** | — (avoided by contract) | `import.meta.env.DEV` / DEBUG; verify absent from prod build |
+| 12 | **Inline-style escape hatch** | `style="color:#…"` in templates | audit script scans template attributes |
+| 13 | **Tailwind / SFC script escape** | `bg-[#fff]` and `<script> primary: '#fff'` (including multiline object literals) passed stylelint and same-line keyword filters | audit script; SFC script hex is error-level even without a color-ish key on the same line. `querySelector('#fade')` / `getElementById('…')` id strings are exempt (not colors). Other hex-like quoted ids still flag — record as leftover or rename, do not weaken the rule |
+| 14 | **SoT-in-Vue missed** | uniapp tokens lived in App.vue; auditor only looked at `.css` | SoT detection includes SFC `<style>` |
+| 15 | **Cross-end drift** | native colors edited directly | SoT + codegen + CI diff (Mode D / swiftui skill) |
+| 16 | **Hooks mistaken for enforcement** | pre-commit is local and bypassable | CI is the durable layer |
+| 17 | **Copied px on the acceptance page** | labels said `12px` while SoT moved | page lists token names only |
 
 ## Migration discipline (Tier-2 batches)
 
-- Migrate per-file, `#hex → var(--*)`, zero intended pixel change; screenshots before/after where
-  feasible (page-level, not component-level).
-- A batch that intentionally changes visuals (semantic fixes like pitfall 4/5) is its OWN change
-  with its own commit message saying the color visibly moves. Never smuggle a visual change inside
-  "mechanical refactor".
-- Unmigratable leftovers (deadline pressure, third-party CSS) go to the leftovers section with file
-  paths — recorded debt, not silent debt.
+- Migrate per-file, `#hex → var(--*)`, zero intended pixel change.
+- A batch that intentionally changes visuals is its OWN commit.
+- Unmigratable leftovers go to the leftovers section with file paths.
 
 ## Audit table template (drop into the design doc)
+
+Rows match SKILL.md phases. Do not invent a second numbering.
 
 ```markdown
 ## 改造审计（诚实记录）
 
 | 阶段 | 内容 | 状态 |
 | --- | --- | --- |
-| P0 | SoT 收敛（theme.css 重写；删除平行 token 源/死代码） | ✅/⬜ |
-| P1 | 语义 token 补全（状态四件套/字号/间距/圆角/动效） | ✅/⬜ |
-| P2 | 业务层 hex/rgba 硬编码清零 | ✅/⬜ |
-| P3 | 语义组件抽取 + 业务迁移（列出组件 × 已迁页面） | ✅ 主路径 / ⬜ |
-| P4 | stylelint 门禁（color-no-hex，error，白名单仅 SoT） | ✅/⬜ |
-| P4b | pre-commit 挂钩 + CI（写明是否 fail-closed） | ✅/⬜ |
-| P5 | 验收页 + 本文档 | ✅/⬜ |
+| P0 | 技术栈探测；确认 app root | ✅/⬜ |
+| P1 | 基线审计（记录 error/warn 计数） | ✅/⬜ |
+| P2 | SoT 收敛（theme.css；删除平行 token 源） | ✅/⬜ |
+| P3 | 门禁（color-no-hex + 自测曾失败）+ 暂用 staged-only hooks | ✅/⬜ |
+| P4 | 消费层 + 业务 hex/rgba 机械替换 | ✅/⬜ |
+| P5 | 语义组件 + 验收页（dev-only） | ✅/⬜ |
+| P6 | 诚实遗留 + 全量 CI fail-closed | ✅/⬜ |
 
-### 已知遗留（诚实记录）
+### 已知遗留
 - <file:line> <what> <why not done> <proposed owner/timeline>
 ```
 
-Adoption counts make the table honest at a glance (case-study numbers: iOS — 182 `evairTextStyle`
-uses, 699 `DesignTokens.` uses, 156 `Evair*` component uses; H5 — 13/13 files consuming `var(--*)`).
-Re-count after each migration batch; a component with zero business usage is a skeleton, and the
-table must say so.
+Re-count after each migration batch. A component with zero business usage is a skeleton; the table
+must say so. Do not copy iOS adoption numbers into this H5 table — they live in
+`swiftui-style-unify/references/gate-and-pitfalls.md`.
 
 ## Acceptance checklist (final pass)
 
-- [ ] `node scripts/audit-styles.mjs <app-root>` exits 0; before/after counts captured.
+- [ ] `node scripts/audit-styles.mjs <app-root>` exits 0 (or leftovers listed); before/after captured.
 - [ ] Gate self-test executed and OBSERVED failing on injected `#abcdef`, then passing.
-- [ ] `npm run build` (or platform equivalent) — acceptance route absent from the artifact;
-      dev server — acceptance page renders with runtime `var()` values.
+- [ ] Prod build: acceptance route absent. Dev: page renders with runtime `var()` values, no copied px/hex.
 - [ ] Every wrapped component appears in the acceptance matrix.
-- [ ] Design doc: projection only (no copied color tables), audit table filled, leftovers listed
-      with file paths.
-- [ ] Visible color changes (if any) listed as a separate deliverable, distinct from the mechanical
-      refactor.
-- [ ] Dark mode (if in scope): semantic tokens re-assigned in one block; lib bridge verified in
-      both themes; no scale-layer fork.
+- [ ] Visible color changes listed as a separate deliverable.
+- [ ] Dark mode (if in scope): semantic tokens **and** `*-rgb` re-assigned in one block.

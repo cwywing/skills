@@ -4,53 +4,39 @@
 
 A portable Agent Skill. It unifies style, color, and visual design for an **existing**
 H5 / mobile-web project — converging scattered hard-coded colors into one token source of
-truth, wrapping components around semantics, and enforcing it all with a machine gate —
+truth, wrapping components around semantics, and enforcing it with a machine gate —
 without a big-bang rewrite.
 
-The pipeline is not theory: it was **cross-validated on two production codebases** — a bare
-Vue3 WeChat-embedded H5 app (star-training) and a SwiftUI iOS client sharing an H5 SoT
-(EvairSIM) — including every pitfall they paid for (gate false-green, the rgba blind spot,
-semantic dual-caliber colors, SoT drift).
+**Evidence, stated honestly:** one production H5 codebase (bare Vue3 WeChat-embedded app)
+proved theme.css + stylelint + the rgba/inline-style/customSyntax pitfalls. A sibling
+SwiftUI app sharing that H5 SoT proved the five-ring **order** and codegen; Swift details
+live in [swiftui-style-unify](../swiftui-style-unify/). Do not read this as two independent
+H5 rollouts. The H5 case did not ship CI — CI in the workflow is the layer it should have had.
 
-## The five rings
+## Install order (not ring-number order)
 
 ```
-1 SoT          theme.css — the ONLY file allowed to hold raw hex
-2 Consumption  base.css global classes / component-lib var bridging; business uses var(--*)
-3 Components   tone × variant semantic wrappers; business passes semantics, never colors
-4 Gate         stylelint color-no-hex (error) + pre-commit + CI — fail-closed
-5 Acceptance   dev-only design-system page rendering every token at runtime values
+P0 detect → P1 audit → P2 SoT → P3 gate (self-test) → P4 migrate → P5 components + acceptance → P6 record + CI
 ```
 
-Governing principles (both case studies converge on them): a credible **gate before broad
-component work**; **one rule that survives beats many rules**; **docs are projections,
-never a second SoT**; **fail-closed, never fake-green**; and an **honest audit table**
-that lists unpaid debt by file path.
+A credible gate comes **before** broad component work. One rule that survives beats many
+rules. Docs are projections, never a second SoT.
 
 ## What's inside
 
-- **Workflow** (SKILL.md): Phase 0 stack detection → Phase 1 audit → SoT → consumption →
-  gate → acceptance page → honest audit table, with mutation-safety tiers for every phase
-  (this skill edits real code).
-- **`scripts/audit-styles.mjs`** — zero-dependency, fail-closed audit. Covers what
-  stylelint cannot see: literal `rgba()/hsl()`, inline `style="…#fff…"`, JS-side color
-  literals; auto-detects the SoT, the gate, and the stack. Tested against both case-study
-  repos (where it re-found the recorded JS-side blind spots) and a synthetic violation
-  project.
-- **`references/`** — token taxonomy & two-layer naming; stack adapters (bare Vue/React,
-  Vant, antd-mobile, Varlet, uniapp, cross-end SoT + codegen); gate configs verbatim
-  (stylelint trap included); the cross-validated pitfall list + audit-table template; the
-  two case studies side by side.
-- **`assets/`** — drop-in templates: annotated `theme.css` (light + optional dark),
-  `.stylelintrc.json` with the Chinese remediation message, and a Vue3 dev-only
-  design-system acceptance page.
+- **Workflow** (SKILL.md): P0–P6 with mutation-safety tiers.
+- **`scripts/audit-styles.mjs`** — zero-dependency, fail-closed. Covers stylelint blind
+  spots: literal `rgba()/hsl()`, inline `style=`, Tailwind `bg-[#…]`, Vue SFC `<script>`
+  color literals, uniapp `.wxss`/`.nvue`/`.uvue`. SoT detection includes Vue/uni global
+  `<style>`. `tests/` locks these cases.
+- **`references/`** — taxonomy, stack adapters (A–D), gate configs (`<app-root>`, not
+  `h5/`), pitfalls + P0–P6 audit table, case-study evidence.
+- **`assets/`** — `theme.css` (light + optional dark, including `*-rgb` in dark),
+  `.stylelintrc.json`, Vue3 dev-only acceptance page (token names only).
 
 ## When to use / not use
 
-Use it when the ask is **统一风格 / 统一配色 / 样式统一 / design tokens / 门禁 / 换肤 /
+Use when the ask is **统一风格 / 统一配色 / 样式统一 / design tokens / 门禁 / 换肤 /
 多端视觉一致 / 风格一致性审计** on an existing H5 or mobile-web codebase. Don't use it to
-invent a brand-new visual aesthetic from zero (that's `frontend-design`), and not for
-admin-console ops-UX walkthroughs (that's `admin-console-ux`).
-
-Provenance: sessions `sess_135a0e98` (star-training H5, transcript kept in that repo's
-`docs/`) and `sess_e1b1e90b` (EvairSIM iOS), both 2026-08-30.
+invent a brand-new visual aesthetic (`frontend-design`), and not for admin-console ops-UX
+walkthroughs (`admin-console-ux`).

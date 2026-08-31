@@ -1,55 +1,42 @@
-# Case Studies — two production proofs of the pipeline
+# Case Studies — evidence base
 
-These two projects are the skill's evidence base. Numbers and paths below were verified against the
-codebases (2026-08-30); the pitfalls in `pitfalls-and-audit.md` carry their scars.
+Numbers and paths below were verified against the codebases (2026-08). This is the **only** file
+in this skill that stores adoption counts. Do not duplicate them in README or SKILL.md.
 
-## Side-by-side
+## What was actually proven
 
-| Ring | star-training H5 | EvairSIM iOS |
+| | H5 production case | iOS sibling (shared SoT) |
 | --- | --- | --- |
-| Stack | bare Vue3 + vue-router + Vite, WeChat-embedded H5 | SwiftUI (iOS 17+, `@Observable`), eSIM store |
-| SoT | `h5/src/theme/theme.css` (143 lines, hex, two-layer names) | shared `../h5/src/styles.css` (`:root` + `.dark`, OKLCH vars) |
-| Sync | none needed (single end) | `scripts/sync-design-tokens.mjs` → 35 `.colorset` (Any+Dark), OKLCH→sRGB; intermediate JSON gitignored |
-| Consumption | `h5/src/styles/base.css` global classes; business `var(--*)` | `DesignTokens.swift` typed entry (`typealias`s) + `EvairTheme` Environment injection (white-label ready) |
-| Components | `AppStatusTag` (tone×variant), `AppButton` (variant×size, skeleton) | 12 `Evair*` components (Button/Card/Badge/Chip/EmptyState/Skeleton/Progress/Toggle/TextField/ListRow/SymbolStyle) |
-| Gate | stylelint `color-no-hex` (error, CN message) + pre-commit lint-staged | `scripts/lint-design-system.sh` (ripgrep MUST-NOTs) + CI; CI re-syncs tokens and diffs — stale = red |
-| Acceptance | `views/_DesignSystem.vue`, route only when `import.meta.env.DEV` | `DesignSystemPreviewView.swift`, DEBUG → Design tab; new components must register |
-| Adoption (measured) | 13/13 style-bearing files on `var(--*)`; zero raw hex outside SoT | 182 `evairTextStyle`, 699 `DesignTokens.`, 156 `Evair*` uses in Features |
-| Recorded leftovers | rgba leak (fixed list), warning dual-caliber, AppButton unmigrated, no CI, admin-side outside the system | audit doc `design-system-audit-2026-08-09.md`; Motion aligned to H5 curves in P2 |
+| Role in this skill | The H5 pipeline (theme.css, stylelint, rgba/inline pitfalls, Vue consumption) | Proves the five-ring **order** and Mode D codegen; Swift details belong to `swiftui-style-unify` |
+| Stack | bare Vue3 + vue-router + Vite, WeChat-embedded H5 | SwiftUI (iOS 17+), store app sharing the H5 SoT |
+| SoT | `src/theme/theme.css` (hex, two-layer names) | shared web CSS (`:root` + `.dark`) |
+| Gate | stylelint `color-no-hex` (error) + pre-commit lint-staged | ripgrep MUST-NOT + CI; CI re-syncs tokens |
+| Acceptance | `views/_DesignSystem.vue`, `import.meta.env.DEV` | DEBUG Design tab |
+| Adoption (measured) | 13/13 style-bearing files on `var(--*)`; zero raw hex outside SoT | recorded in the Swift skill — do not copy here |
+| Recorded leftovers | rgba leak (later listed), warning dual-caliber, AppButton unmigrated, **no CI at the time of the H5 case**, admin-side outside the system | see sibling skill |
 
-## Convergent decisions (both projects, independently)
+The H5 case did **not** ship CI. Treat CI in this skill as the durable layer the case *should* have
+had, not as something that case already ran.
 
-These are the transferable invariants — treat them as defaults, not options:
+## Convergent decisions (transferable defaults)
 
 1. One SoT file; everything else consumes or is generated.
-2. Docs are indexes/projections; copying color tables into docs is banned on both sides.
+2. Docs are indexes/projections; copying color tables into docs is banned.
 3. Semantic two-layer naming (scale ↔ intent).
-4. Components take semantic props (`tone`, `variant`, `size`) and own ALL color mapping; layout and
-   sizing stay with the caller (`class="badge"` shrinks to size/position only).
+4. Components take semantic props and own color mapping; layout stays with the caller.
 5. Machine gate with error-level failure and explicit remediation messages.
 6. Acceptance page that renders runtime values and doubles as the component registry.
-7. Progressive tightening — one rule first, "a rule that survives beats many rules".
+7. Progressive tightening — one rule first.
 8. Honest audit tables with unpaid debt listed by file path.
 
-## Divergences (why they differ — pick deliberately)
+## Divergences (pick deliberately)
 
-- **Gate order.** H5 built SoT→components→gate sequentially; iOS retro ("gate on sand") made
-  gate-credibility P0. The skill's operating principles adopt the iOS ordering.
-- **SoT scope.** Single-end project keeps a local SoT (simpler); multi-end product points every
-  platform at the web SoT + codegen (drift-proof, costs CI discipline). See `stack-adapters.md`.
-- **Gate tool.** CSS platform → stylelint (rule ecosystem); non-CSS / extra MUSTs → ripgrep
-  `assert_no_match` script. Both are fail-closed.
-- **Token depth.** iOS adds full font objects (size/weight/lineHeight/tracking + Dynamic Type),
-  Motion tokens, Metrics; a first-pass H5 consolidation can defer these — add when a second
-  consumer exists.
+- **Gate order.** The H5 case built SoT → components → gate sequentially; the iOS retro made
+  gate-credibility P3 (before components). This skill's **workflow** adopts the iOS ordering.
+- **SoT scope.** Single-end keeps a local SoT; multi-end points at the web SoT + codegen.
+- **Gate tool.** CSS → stylelint; extra MUSTs / Swift → ripgrep script.
+- **Token depth.** iOS adds full font objects + Motion + Metrics; a first-pass H5 consolidation
+  can defer those until a second consumer exists.
 
-## Source records
-
-- star-training session transcript (full Q&A + review round, incl. the three review findings):
-  `docs/sess_135a0e98-6416-4cd1-94b4-ac8f1e82c243-style-unification-transcript.md` in that repo.
-- EvairSIM session `sess_e1b1e90b-8cb3-4875-b693-826cffd26a99` (WSL-side ZCode session library);
-  repo docs: `docs/design-system.md`, `docs/design-tokens.md`, `docs/components-reference.md`,
-  `.cursor/rules/design-system.mdc`.
-
-When applying this skill to a new project, mirror the closest column, then read
-`pitfalls-and-audit.md` once before writing any file.
+When applying this skill, mirror the H5 column for Vue/CSS work; read `pitfalls-and-audit.md`
+once before writing any file. For native implementation, switch to `swiftui-style-unify`.

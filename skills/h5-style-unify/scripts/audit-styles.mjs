@@ -3,14 +3,15 @@
  * audit-styles.mjs — style-consistency audit for H5 / mobile-web frontends.
  *
  * Zero dependencies, Node >= 18. Covers the blind spots a stylelint `color-no-hex`
- * gate cannot see: literal rgba()/hsl(), inline style="" colors in templates, and
- * JS-side color literals; also reports structural facts (SoT presence, gate presence,
- * stack detection) so a run doubles as a Phase-0/1 report.
+ * gate cannot see: literal rgba()/hsl(), inline style="" colors, Tailwind/Uno
+ * arbitrary hex (`bg-[#fff]`), JS-side color literals (including Vue SFC
+ * <script>), and uniapp .wxss/.nvue/.uvue. Also reports structural facts
+ * (SoT presence — css/scss *and* Vue/uni global style — gate, stack).
  *
  * Usage:
  *   node audit-styles.mjs <app-root> [--sot <path>] [--json] [--strict]
  *
- * Fail-closed contract (mirrors the gate-configs doctrine):
+ * Fail-closed contract:
  *   exit 0 — no errors (warnings allowed unless --strict)
  *   exit 1 — violations found, or no SoT detected
  *   exit 2 — operational failure (bad path, unreadable dir, zero files scanned).
@@ -20,7 +21,6 @@
 import fs from "node:fs";
 import path from "node:path";
 
-// ---------- args ----------
 const argv = process.argv.slice(2);
 const positional = [];
 const opts = { sot: null, json: false, strict: false };
@@ -48,7 +48,11 @@ if (parseInt(process.versions.node.split(".")[0], 10) < 18) {
   fail2(`Node >= 18 required (running ${process.versions.node})`);
 }
 
-// ---------- ignore handling (stylelintignore + built-ins) ----------
+const SCAN_EXT = /\.(css|scss|wxss|vue|nvue|uvue|js|ts|jsx|tsx)$/;
+const SFC_EXT = /\.(vue|nvue|uvue)$/;
+const CSS_EXT = /\.(css|scss|wxss)$/;
+const SOT_CANDIDATE = /\.(css|scss|wxss|vue|nvue|uvue)$/;
+
 const SKIP_DIRS = new Set(["node_modules", ".git", "dist", "build", ".next", ".nuxt", ".output", "unpackage", "coverage"]);
 const ignoredGlobs = [];
 const stylelintignore = path.join(APP_ROOT, ".stylelintignore");
@@ -59,18 +63,13 @@ if (fs.existsSync(stylelintignore)) {
   }
 }
 function globToRe(g) {
-  // minimal matcher: supports **, *, and trailing-dir semantics; enough for ignore files
   let s = g.replace(/[.+^${}()|[\]\\]/g, "\\$&").replace(/\*\*/g, "\u0000").replace(/\*/g, "[^/]*").replace(/\u0000/g, ".*");
-  if (!s.includes("/")) s = `(^|/)${s}`;          // bare name matches at any depth
+  if (!s.includes("/")) s = `(^|/)${s}`;
   return new RegExp(s.endsWith("/") ? `${s}.*` : `${s}(/|$)`);
 }
 const ignoredRes = ignoredGlobs.map(globToRe);
 const isIgnored = (rel) => ignoredRes.some((re) => re.test(rel)) || SKIP_DIRS.has(path.basename(rel));
 
-// ---------- collect files ----------
-// Ignored files (SKIP_DIRS / .stylelintignore) stay in the list with ignored=true:
-// the SoT is normally stylelint-whitelisted, so detection must still see it —
-// only violation scanning skips ignored files.
 const files = [];
 (function walk(dir) {
   let entries;
@@ -80,15 +79,27 @@ const files = [];
     const rel = path.relative(APP_ROOT, path.join(dir, e.name));
     if (e.isDirectory()) {
       if (!SKIP_DIRS.has(e.name) && !isIgnored(rel)) walk(path.join(dir, e.name));
-    } else if (/\.(css|scss|vue|js|ts|jsx|tsx)$/.test(e.name)) {
+    } else if (SCAN_EXT.test(e.name)) {
       files.push({ abs: path.join(dir, e.name), rel, ignored: isIgnored(rel) });
     }
   }
 })(APP_ROOT);
 if (files.length === 0) fail2(`zero scannable files under ${APP_ROOT} — wrong app root?`);
 
-// ---------- SoT detection ----------
+function styleBlocks(text) {
+  return [...text.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)];
+}
+function scriptBlocks(text) {
+  return [...text.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)];
+}
+function cssTextOf(f, text) {
+  if (SFC_EXT.test(f.rel)) return styleBlocks(text).map((m) => m[1]).join("\n");
+  if (CSS_EXT.test(f.rel)) return text;
+  return "";
+}
 function countCustomProps(text) { return (text.match(/^\s*--[A-Za-z0-9-]+\s*:/gm) || []).length; }
+function looksLikeSotHost(text) { return /:root|page\s*\{|uni-page/.test(text); }
+
 let sot = null;
 if (opts.sot) {
   const p = path.resolve(APP_ROOT, opts.sot);
@@ -97,17 +108,16 @@ if (opts.sot) {
 } else {
   let best = null;
   for (const f of files) {
-    if (!/\.(css|scss)$/.test(f.rel)) continue;
+    if (!SOT_CANDIDATE.test(f.rel)) continue;
     const text = fs.readFileSync(f.abs, "utf8");
-    if (/:root|page\s*\{|uni-page/.test(text)) {
-      const n = countCustomProps(text);
-      if (n >= 10 && (!best || n > best.n)) best = { ...f, n };
-    }
+    const css = cssTextOf(f, text) || text;
+    if (!looksLikeSotHost(css)) continue;
+    const n = countCustomProps(css);
+    if (n >= 10 && (!best || n > best.n)) best = { ...f, n };
   }
   if (best) sot = { rel: best.rel, abs: best.abs };
 }
 
-// ---------- stack & gate detection ----------
 function readPkg(dir) {
   const p = path.join(dir, "package.json");
   return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, "utf8")) : null;
@@ -115,7 +125,7 @@ function readPkg(dir) {
 const pkg = readPkg(APP_ROOT);
 const deps = { ...(pkg?.dependencies || {}), ...(pkg?.devDependencies || {}) };
 let stack = "unknown";
-if (deps["@dcloudio/uni-app"] || deps["@dcloudio/vite-plugin-uni"]) stack = "uniapp";
+if (deps["@dcloudio/uni-app"] || deps["@dcloudio/vite-plugin-uni"] || fs.existsSync(path.join(APP_ROOT, "manifest.json"))) stack = "uniapp";
 else if (deps.vant) stack = "vue3 + vant";
 else if (deps["ant-design-mobile"] || deps["antd-mobile"]) stack = "react + antd-mobile";
 else if (deps.varlet) stack = "vue3 + varlet";
@@ -142,22 +152,27 @@ for (const parent of [APP_ROOT, path.dirname(APP_ROOT), path.dirname(path.dirnam
   if (fs.existsSync(wf) && fs.readdirSync(wf).some((f) => /lint|ci|style/i.test(f))) gate.ci = true;
 }
 
-// ---------- scanning ----------
-// valid color lengths: 3,4,6,8 hex digits; preceded by a value-ish char so bare
-// words in comments/identifiers don't match
-const hexRe = /(?<=[:,\s(='"])#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
+// lookbehind includes `[` so Tailwind/Uno arbitrary values (`bg-[#1677ff]`) match
+const hexRe = /(?<=[:,\s(='"[])#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/g;
 const rgbLiteralRe = /\brgba?\(\s*\d/g;
 const hslLiteralRe = /\bhsla?\(\s*\d/g;
 
 function stripCommentsKeepLen(text) {
-  return text.replace(/\/\*[\s\S]*?\*\//g, (m) => " ".repeat(m.length));
+  let s = text.replace(/\/\*[\s\S]*?\*\//g, (m) => " ".repeat(m.length));
+  // `http://` is safe: the char before `//` is `:`, excluded by [^:]
+  return s.replace(/([^:]|^)\/\/.*$/gm, (m, p1) => (p1 || "") + " ".repeat(m.length - (p1 ? p1.length : 0)));
 }
 function lineOf(text, idx) { return text.slice(0, idx).split("\n").length; }
 function looksLikeSelector(text, matchEnd) {
-  // "#fade {" / "#fade:hover" are id selectors, not colors: only selector-ish
-  // chars may sit between the hex and a following "{" or pseudo-class
   const rest = text.slice(matchEnd, matchEnd + 60);
   return /^\s*[.:#>~+*\w\s[\]="'-]*\{/.test(rest) || /^\s*:{1,2}[\w-]+/.test(rest);
+}
+function looksLikeDomIdSelector(text, hashIndex) {
+  // querySelector('#fade') / getElementById('fade') — id, not a color.
+  // Only the argument immediately after those APIs is exempt; a palette
+  // next to it still flags.
+  const before = text.slice(Math.max(0, hashIndex - 96), hashIndex);
+  return /(?:querySelector(?:All)?|getElementById)\s*\(\s*['"]$/.test(before);
 }
 
 const findings = [];
@@ -183,54 +198,69 @@ function scanCssLike(text, rel, startLine) {
   }
 }
 function scanInlineStyles(text, rel) {
-  // template attribute style="...#fff..." and :style bindings containing color literals
   for (const re of [/(?<!:)style="[^"]*"/g, /:style="[^"]*"/g]) {
     let m;
     while ((m = re.exec(text))) {
       const attr = m[0];
-      if (/#[0-9a-fA-F]{3,8}\b/.test(attr) || /rgba?\(\s*\d|hsla?\(\s*\d/.test(attr)) {
+      if (/#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})\b/.test(attr) || /rgba?\(\s*\d|hsla?\(\s*\d/.test(attr)) {
         addFinding("error", "inline-style-color", rel, lineOf(text, m.index), attr,
           "模板内联样式携带颜色字面量 — 移入 class，经 var(--*) 消费");
       }
     }
   }
 }
-function scanJsColorish(text, rel) {
+function scanJsColorish(text, rel, startLine = 1, asError = false) {
   const clean = stripCommentsKeepLen(text);
   let m;
   hexRe.lastIndex = 0;
   while ((m = hexRe.exec(clean))) {
     const line = clean.split("\n")[lineOf(clean, m.index) - 1] || "";
-    if (/colou?r|background|bg|theme|border/i.test(line)) {
-      addFinding("warn", "js-color", rel, lineOf(clean, m.index), line,
-        "JS 侧颜色字面量 — 评估改为从 SoT 导出/注入，暂仅报告");
-    }
+    if (looksLikeDomIdSelector(clean, m.index)) continue;
+    const prev = clean[m.index - 1] || "";
+    const quoted = prev === "'" || prev === '"';
+    // SFC <script>: any hex literal is the same leak as CSS hex — do not require
+    // a same-line keyword (multiline `primary: '#1677ff'` would otherwise PASS).
+    // Standalone JS: quoted hex always counts; unquoted needs a color-ish key.
+    const keyed = /colou?r|background|\bbg\b|theme|border|fill|stroke|palette|primary|secondary|success|warning|danger|accent/i.test(line);
+    if (!asError && !quoted && !keyed) continue;
+    addFinding(
+      asError ? "error" : "warn",
+      "js-color",
+      rel,
+      startLine + lineOf(clean, m.index) - 1,
+      line,
+      asError
+        ? "SFC/脚本里的颜色字面量 — 先在 SoT 登记，再注入/导出 token（与 CSS 裸 hex 同级）"
+        : "JS 侧颜色字面量 — 评估改为从 SoT 导出/注入；--strict 时升级为 error",
+    );
   }
 }
 
 for (const f of files) {
-  if (f.ignored) continue; // whitelisted (stylelintignore) — exempt from violation scanning
-  if (sot && path.resolve(f.abs) === path.resolve(sot.abs)) continue; // SoT is whitelisted
+  if (f.ignored) continue;
+  if (sot && path.resolve(f.abs) === path.resolve(sot.abs)) continue;
   const text = fs.readFileSync(f.abs, "utf8");
-  if (f.rel.endsWith(".vue")) {
+  if (SFC_EXT.test(f.rel)) {
     scanInlineStyles(text, f.rel);
-    for (const sm of text.matchAll(/<style[^>]*>([\s\S]*?)<\/style>/g)) {
+    for (const sm of styleBlocks(text)) {
       scanCssLike(sm[1], f.rel, lineOf(text, sm.index));
     }
-  } else if (/\.(css|scss)$/.test(f.rel)) {
+    for (const sc of scriptBlocks(text)) {
+      // SFC script color literals are the same leak as CSS hex — error, not warn
+      scanJsColorish(sc[1], f.rel, lineOf(text, sc.index), true);
+    }
+  } else if (CSS_EXT.test(f.rel)) {
     scanCssLike(text, f.rel, 1);
   } else {
-    scanJsColorish(text, f.rel);
+    scanJsColorish(text, f.rel, 1, false);
   }
 }
 
-// ---------- structural findings ----------
 if (!sot) {
   addFinding("error", "no-sot", "(project)", 0, "",
-    "未检测到设计 token 真相源（含 :root 自定义属性的 css/scss）— 先建立 theme SoT（见 assets/theme.css.tmpl），或用 --sot 指定");
+    "未检测到设计 token 真相源（含 :root / page 自定义属性的 css、scss、wxss 或 Vue/uni SFC）— 先建立 theme SoT（见 assets/theme.css.tmpl），或用 --sot 指定");
 }
 
-// ---------- output ----------
 const errors = findings.filter((f) => f.severity === "error");
 const warns = findings.filter((f) => f.severity === "warn");
 
@@ -246,7 +276,7 @@ if (opts.json) {
   for (const f of findings) (byKind[f.kind] ||= []).push(f);
   for (const [kind, list] of Object.entries(byKind)) {
     console.log(`[${kind}] ×${list.length}`);
-    for (const f of list.slice(0, 50)) console.log(`  ${f.severity === "error" ? "✖" : "⚠"} ${f.file}:${f.line}  ${f.snippet}\n     → ${f.message}`);
+    for (const item of list.slice(0, 50)) console.log(`  ${item.severity === "error" ? "✖" : "⚠"} ${item.file}:${item.line}  ${item.snippet}\n     → ${item.message}`);
     if (list.length > 50) console.log(`  … ${list.length - 50} more`);
   }
 }

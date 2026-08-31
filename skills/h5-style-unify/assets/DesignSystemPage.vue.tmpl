@@ -21,16 +21,15 @@ const colorTokens = [
   { group: '成功', items: ['--color-success', '--color-success-text', '--color-success-soft', '--color-success-border'] },
   { group: '警告', items: ['--color-warning', '--color-warning-text', '--color-warning-soft', '--color-warning-border'] },
   { group: '危险', items: ['--color-danger', '--color-danger-text', '--color-danger-soft', '--color-danger-border'] },
-  { group: '渠道·微信', items: ['--color-wecom', '--color-wecom-soft'] },
+  // 有渠道色时在此加一组，例如 { group: '渠道·微信', items: ['--color-wecom', '--color-wecom-soft'] }
   { group: '文字', items: ['--color-text', '--color-text-secondary', '--color-text-secondary-strong', '--color-text-muted', '--color-text-on-primary'] },
   { group: '背景/边框', items: ['--color-bg-page', '--color-bg-card', '--color-bg-muted', '--color-bg-subtle', '--color-bg-footer', '--color-border'] },
   { group: 'Hero 渐变', items: ['--color-hero-from', '--color-hero-to', '--color-hero-3'] },
 ]
 
 const fsTokens = [
-  ['--fs-caption', '12px 说明'], ['--fs-sm', '13px 辅助'], ['--fs-base', '14px 正文'],
-  ['--fs-md', '15px'], ['--fs-lg', '16px 小标题'], ['--fs-xl', '17px 导航'],
-  ['--fs-2xl', '20px'], ['--fs-3xl', '22px'], ['--fs-hero', '28px Hero'],
+  '--fs-caption', '--fs-sm', '--fs-base', '--fs-md', '--fs-lg',
+  '--fs-xl', '--fs-2xl', '--fs-3xl', '--fs-hero',
 ]
 
 const spaceTokens = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-5', '--space-6', '--space-8', '--space-12']
@@ -66,10 +65,9 @@ const statusMatrix = [
 
     <section class="ds-section">
       <h2>字号阶梯</h2>
-      <div class="ds-fs-row" v-for="[t, label] in fsTokens" :key="t">
+      <div class="ds-fs-row" v-for="t in fsTokens" :key="t">
         <span class="ds-fs-sample" :style="{ fontSize: `var(${t})` }">示例文字 Ag</span>
         <code>{{ t }}</code>
-        <span class="ds-fs-label">{{ label }}</span>
       </div>
     </section>
 
