@@ -23,7 +23,7 @@ GitHub 仓库名叫 `skills`；内层 `skills/` 是
 | [admin-console-ux](skills/admin-console-ux/) | 优化管理后台交互与显示，对齐主流中后台**运维使用习惯** |
 | [h5-style-unify](skills/h5-style-unify/) | 统一**既有** H5 / 移动端项目的风格配色设计 — token 真相源、机器门禁、验收页 |
 | [swiftui-style-unify](skills/swiftui-style-unify/) | 同一套五环统一法用于**既有** SwiftUI / iOS 应用 — `DesignTokens` 命名空间、Dynamic Type 排版、ripgrep 门禁、共享 SoT 代码生成 |
-| [ruanzhu-copyright](skills/ruanzhu-copyright/) | 准备中国大陆 **软件著作权（软著）** 鉴别材料 — 程序/文档鉴别材料、脱敏、Word/PDF 导出 |
+| [ruanzhu-copyright](skills/ruanzhu-copyright/) | 准备中国大陆 **软件著作权（软著）** 鉴别材料 — 程序/文档鉴别材料、运行截图与名称说明补正、脱敏、Word/PDF 导出 |
 
 它们可以组合：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring**
 把重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用

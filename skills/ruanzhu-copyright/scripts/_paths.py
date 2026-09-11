@@ -10,6 +10,7 @@
         core_business_files.json
         program_identification-*.md
         document_identification-*.md
+        screenshots/              # 有人机界面时的真机 PNG
         *.docx
 
 用法:

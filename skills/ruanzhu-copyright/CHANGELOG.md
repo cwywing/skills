@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.6.3
+
+吸纳 `dev.eins1.cn` 侧 1.5.3 可复用口径（不另建第二份手册）：
+
+- 新增 `assets/软件名称说明.template.md`；Phase 0 可出签章草稿
+- `基础资料` 增加 `文档类型`、`名称需说明的品牌词`（与 `有人机界面` 必须一致）
+- 截图：每图 3～5 句、平台一致、数量参考 15～30 / 3～5；ASCII 不能替代真机图
+- **不采纳**：把全部截图只放 `document_identification-5.md` 文末（会让前 30 页没图）；截图目录仍为 `md素材/screenshots/`
+- 合入本仓库时去掉 `rejection-hotspots.md` 重复标题
+
+## 1.6.2
+
+本轮补正实测（插图可见 + 只导文档）：
+
+- `md2docx.py --only document|program`：补正只改点名项，避免覆盖未改的程序/文档稿
+- Word 占用目标 docx 时另存 `*-重新生成.docx`，并打印插图张数与高度（<1cm 告警细黑线）
+- 手册：细黑线成因、同一 PNG 勿三处全贴、界面名称/版本须对上申请表
+- 回归：插图单倍行距与 `--only` 不改另一份；测试夹具对齐现行 `基础资料` 占位目录键
+- `extract_codebase_data.py`：控制器目录不存在时跳过，不再 listdir 崩溃
+
+## 1.6.1
+
+- `md2docx.py` 插图段改为单倍行距：正文 Normal 固定 13 磅会把嵌入图压成一条线
+
+## 1.6.0
+
+补正实测固化（名称说明 + 运行截图分型）：
+
+- 新增 `references/rejection-hotspots.md`：法规不强制「所有类型都截图」；有人机界面按操作手册必须真机连贯截图；无图形界面走设计说明书、禁止虚构 UI
+- 硬约束 14（软件名称专有词 / 《软件名称说明》或商标证）、15（截图分型；不得以「上次没要」为由省略）
+- `基础资料` 增加 `有人机界面`；Phase 3 / document_prompt / checklist / submission-rules 同步
+- `md2docx.py` 支持 Markdown 图片（`![图注](screenshots/….png)`）
+
 ## 1.5.2
 
 本仓库 FastAdmin+CMS 实战沉淀：

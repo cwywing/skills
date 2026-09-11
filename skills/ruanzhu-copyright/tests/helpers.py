@@ -5,6 +5,7 @@ from __future__ import print_function
 
 import json
 import os
+import re
 import shutil
 import tempfile
 
@@ -34,8 +35,26 @@ def make_workdir():
         content = f.read()
 
     content = content.replace("后端项目根目录: .", "后端项目根目录: " + backend_root())
-    # 仅后端测试时前端仍指向 fixture；模板第二行可能是「前端项目根目录: .」
-    content = content.replace("前端项目根目录: .", "前端项目根目录: " + frontend_root(), 1)
+    content = re.sub(
+        r"^前端项目根目录:.*$",
+        lambda _m: "前端项目根目录: " + frontend_root(),
+        content,
+        count=1,
+        flags=re.M,
+    )
+    content = content.replace(
+        "后端模型目录: （相对后端根，按实填写）", "后端模型目录: app/Models"
+    )
+    content = content.replace(
+        "后端控制器目录: （相对后端根，按实填写）",
+        "后端控制器目录: app/Http/Controllers",
+    )
+    content = content.replace(
+        "后端服务目录: （相对后端根，按实填写）", "后端服务目录: app/Services"
+    )
+    content = content.replace(
+        "后端路由目录: （相对后端根；无可留空）", "后端路由目录: routes/api"
+    )
     # 兼容旧模板占位
     content = content.replace("/absolute/path/to/backend", backend_root())
     content = content.replace("/absolute/path/to/frontend", frontend_root())
@@ -134,6 +153,31 @@ def make_workdir():
             f.write(body)
 
     return workdir
+
+
+def write_tiny_png(path, width=80, height=160, rgb=(20, 90, 180)):
+    """写一张无需 Pillow 的真彩色 PNG，供 md2docx 插图测试。"""
+    import struct
+    import zlib
+
+    def chunk(tag, data):
+        crc = zlib.crc32(tag + data) & 0xFFFFFFFF
+        return struct.pack(">I", len(data)) + tag + data + struct.pack(">I", crc)
+
+    pixel = bytes(bytearray(rgb))
+    raw = b"".join(b"\x00" + pixel * width for _ in range(height))
+    ihdr = struct.pack(">IIBBBBB", width, height, 8, 2, 0, 0, 0)
+    png = (
+        b"\x89PNG\r\n\x1a\n"
+        + chunk(b"IHDR", ihdr)
+        + chunk(b"IDAT", zlib.compress(raw, 9))
+        + chunk(b"IEND", b"")
+    )
+    parent = os.path.dirname(path)
+    if parent and not os.path.isdir(parent):
+        os.makedirs(parent)
+    with open(path, "wb") as f:
+        f.write(png)
 
 
 def cleanup(workdir):

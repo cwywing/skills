@@ -59,7 +59,15 @@ def docx_to_pdf(docx_path, pdf_path):
         abs_docx = os.path.abspath(docx_path)
         abs_pdf = os.path.abspath(pdf_path)
         if os.path.exists(abs_pdf):
-            os.remove(abs_pdf)
+            try:
+                os.remove(abs_pdf)
+            except OSError:
+                print(
+                    "  无法覆盖已打开的 PDF: {}，请先关闭阅读器后重试".format(
+                        abs_pdf
+                    )
+                )
+                raise
         doc = word.Documents.Open(abs_docx, ReadOnly=True)
         # 17 = wdFormatPDF
         doc.SaveAs(abs_pdf, FileFormat=17)

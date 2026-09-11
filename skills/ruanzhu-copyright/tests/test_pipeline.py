@@ -18,7 +18,7 @@ sys.path.insert(0, TESTS_DIR)
 from helpers import make_workdir, cleanup  # noqa: E402
 
 
-def _run_script(script_name, workdir):
+def _run_script(script_name, workdir, extra_args=None):
     """以独立 argv 执行脚本 main（静默 stdout/stderr）。"""
     import contextlib
     from io import StringIO
@@ -36,6 +36,8 @@ def _run_script(script_name, workdir):
     buf = StringIO()
     try:
         sys.argv = [path, "--workdir", workdir]
+        if extra_args:
+            sys.argv.extend(extra_args)
         with contextlib.redirect_stdout(buf), contextlib.redirect_stderr(buf):
             runpy.run_path(path, run_name="__main__")
     except SystemExit as e:

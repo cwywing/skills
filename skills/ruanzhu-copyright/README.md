@@ -1,6 +1,6 @@
 # ruanzhu-copyright
 
-中国大陆 **计算机软件著作权登记** 鉴别材料生成 skill（项目级）。版本 **1.5.2**。  
+中国大陆 **计算机软件著作权登记** 鉴别材料生成 skill（项目级）。版本 **1.6.3**。  
 **栈无关**：任意语言/框架；用 `基础资料.md` 配置目录，Phase 2a 手选源码为准。  
 **Demo 参考**：`assets/demos/`（只读示意，勿照抄路径）。
 
@@ -13,14 +13,14 @@
 cp -r ruanzhu-copyright /path/to/project/.cursor/skills/ruanzhu-copyright
 ```
 
-触发示例：「做软著」「生成程序/文档鉴别材料」「软著登记材料」「导出软著 PDF」。
+触发示例：「做软著」「生成程序/文档鉴别材料」「软著登记材料」「导出软著 PDF」「软著补正」。
 
 ## 目录
 
 - `SKILL.md` — Agent 编排入口（含硬约束）
 - `scripts/` — 提取 / 程序 MD / 脱敏 / Word / **PDF 导出**
 - `assets/` — 基础资料模板、文件清单模板、文档 prompt
-- `references/` — 分阶段手册、申请表字段、content-redaction、框架适配、提交规则、质量清单
+- `references/` — 分阶段手册、申请表字段、content-redaction、框架适配、提交规则、质量清单、**易驳回补正点**
 
 ## 快速跑（在仓库根执行）
 
@@ -33,11 +33,26 @@ python .cursor/skills/ruanzhu-copyright/scripts/md2docx.py --workdir docs/软著
 python .cursor/skills/ruanzhu-copyright/scripts/export_identification_pdf.py --workdir docs/软著登记申请
 ```
 
+补正只改文档时：
+
+```bash
+python .cursor/skills/ruanzhu-copyright/scripts/md2docx.py --workdir docs/软著登记申请 --only document
+python .cursor/skills/ruanzhu-copyright/scripts/export_identification_pdf.py --workdir docs/软著登记申请 --only document
+```
+
 `基础资料.md` 后端根目录推荐 `.`；**模板里的语言/框架示例必须改成当前项目真实值**。说明书 **背景→蓝图→流程→模块**；首页须权利人署名三行。
 
 上传用（整本，无全文 PDF）：
 - `程序鉴别材料.pdf` — **80～100 页**
 - `文档鉴别材料.pdf` — **≥60 页**
+
+## 1.6.x 要点
+
+- 有人机界面必须真机截图；无 UI 走设计说明书、禁止虚构界面（`rejection-hotspots.md`）
+- 软件名称专有词：`assets/软件名称说明.template.md` 或商标证
+- `文档类型` 与 `有人机界面` 必须一致
+- Markdown 图片 `![图注](screenshots/….png)`；插图段单倍行距（否则 Word 里变成细黑线）
+- `md2docx` / `export` 支持 `--only document|program`；docx 被占用则另存 `*-重新生成.docx`
 
 ## 1.5.x 要点
 

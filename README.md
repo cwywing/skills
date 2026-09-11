@@ -24,7 +24,7 @@ skill folders onto the repo root — installers will miss them.
 | [admin-console-ux](skills/admin-console-ux/) | Polishing admin / 管理后台 UX so display and interaction match mid-console **ops habits** |
 | [h5-style-unify](skills/h5-style-unify/) | Unifying style/color/design for an **existing** H5 / mobile-web project — token SoT, machine gate, acceptance page |
 | [swiftui-style-unify](skills/swiftui-style-unify/) | The same five-ring unification for an **existing** SwiftUI / iOS app — `DesignTokens` namespace, Dynamic Type typography, ripgrep gate, shared-SoT codegen |
-| [ruanzhu-copyright](skills/ruanzhu-copyright/) | Preparing China **软件著作权** (软著) identification materials — 程序/文档鉴别材料, redaction, Word/PDF export |
+| [ruanzhu-copyright](skills/ruanzhu-copyright/) | Preparing China **软件著作权** (软著) identification materials — 程序/文档鉴别材料, screenshot/name-correction supplements, redaction, Word/PDF export |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
 **skill-authoring** once the harness is running. Use **geo-article-generator**

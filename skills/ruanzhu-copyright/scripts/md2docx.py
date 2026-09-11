@@ -6,13 +6,19 @@
 
 用法:
     python md2docx.py --workdir docs/软著登记申请
+    python md2docx.py --workdir docs/软著登记申请 --only document
+    python md2docx.py --workdir docs/软著登记申请 --only program
 
 特性:
     - 自动从工作目录 基础资料.md 读取软件名称和版本号，写入页眉
-    - 支持标题、段落、代码块、表格、列表、粗体/斜体
+    - 支持标题、段落、代码块、表格、列表、粗体/斜体、Markdown 图片
+    - 插图段单倍行距（正文固定 13 磅会把图压成细线）
+    - 补正可 --only 只转文档或程序，避免覆盖未改的那份
+    - docx 被 Word 占用时另存「*-重新生成.docx」
     - A4 页面，合理字体和行距
 """
 
+import argparse
 import os
 import re
 import glob
@@ -26,7 +32,7 @@ from _paths import parse_workdir_arg, load_basic_info  # noqa: E402
 
 from docx import Document
 from docx.shared import Pt, Cm, RGBColor
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_LINE_SPACING
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml.ns import qn
 from docx.oxml import OxmlElement
@@ -56,11 +62,13 @@ FONT_SIZE_HEADING_BASE = 14
 # 每组: (输出文件名, md 文件匹配模式列表, 按数字排序)
 MERGE_GROUPS = [
     {
+        "key": "document",
         "name": "文档鉴别材料",
         "output": "文档鉴别材料.docx",
         "pattern": "document_identification-*.md",
     },
     {
+        "key": "program",
         "name": "程序鉴别材料",
         "output": "程序鉴别材料.docx",
         "pattern": "program_identification-*.md",
@@ -145,6 +153,47 @@ def add_heading(doc, level, text):
     for run in h.runs:
         run.font.name = FONT_EN
         run._element.rPr.rFonts.set(qn("w:eastAsia"), FONT_CN)
+
+
+def _image_paragraph_format(paragraph):
+    """插图段必须用单倍行距。正文 Normal 是固定 13 磅，会把图片压成一条线。"""
+    fmt = paragraph.paragraph_format
+    fmt.line_spacing_rule = WD_LINE_SPACING.SINGLE
+    fmt.line_spacing = 1.0
+    fmt.space_before = Pt(6)
+    fmt.space_after = Pt(2)
+    return fmt
+
+
+def add_image(doc, md_path, alt, rel_path):
+    """嵌入 Markdown 图片。手机竖屏截图默认宽 7.8cm；缺图时写入占位并告警。"""
+    img_path = rel_path.strip().strip('"').split()[0]
+    if md_path:
+        img_abs = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(md_path)), img_path))
+    else:
+        img_abs = os.path.normpath(os.path.join(MATERIAL_DIR, img_path))
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    _image_paragraph_format(p)
+    if not os.path.isfile(img_abs):
+        print("  [缺图] {}".format(img_path))
+        run = p.add_run("【缺图：{}】".format(alt or img_path))
+        set_run_font(run, font_size=9, italic=True)
+        run.font.color.rgb = RGBColor(192, 0, 0)
+        return False
+    run = p.add_run()
+    run.add_picture(img_abs, width=Cm(7.8))
+    if alt:
+        cap = doc.add_paragraph()
+        cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        cap_fmt = cap.paragraph_format
+        cap_fmt.line_spacing_rule = WD_LINE_SPACING.SINGLE
+        cap_fmt.line_spacing = 1.0
+        cap_fmt.space_before = Pt(2)
+        cap_fmt.space_after = Pt(8)
+        cap_run = cap.add_run(alt)
+        set_run_font(cap_run, font_size=9)
+    return True
 
 
 def add_rich_paragraph(doc, line, font_size=FONT_SIZE_NORMAL, is_code=False):
@@ -258,12 +307,13 @@ def _add_rich_runs(paragraph, text, font_size=12, is_code=False):
             set_run_font(run, font_size, is_code=is_code)
 
 
-def _parse_lines_into_doc(doc, lines):
+def _parse_lines_into_doc(doc, lines, md_path=None):
     """将 markdown 行列表解析并追加到已有 Document 对象中"""
     i = 0
     in_code_block = False
     code_lines = []
     table_lines = []
+    img_re = re.compile(r"^!\[([^\]]*)\]\(([^)]+)\)\s*$")
 
     while i < len(lines):
         line = lines[i].rstrip("\n")
@@ -315,6 +365,16 @@ def _parse_lines_into_doc(doc, lines):
                 add_heading(doc, level, heading_text)
                 i += 1
                 continue
+
+        # --- 图片 ---
+        img_match = img_re.match(stripped)
+        if img_match:
+            if table_lines:
+                _flush_table(doc, table_lines)
+                table_lines = []
+            add_image(doc, md_path, img_match.group(1).strip(), img_match.group(2).strip())
+            i += 1
+            continue
 
         # --- 水平线 ---
         if stripped in ("---", "***", "___"):
@@ -401,19 +461,81 @@ def merge_and_convert(group, software_info):
     for md_path in md_files:
         lines = _read_md_lines(md_path)
         if lines:
-            _parse_lines_into_doc(doc, lines)
+            _parse_lines_into_doc(doc, lines, md_path)
 
-    # 保存
+    # 保存（占用则另存，避免覆盖失败后静默丢稿）
     output_path = os.path.join(MATERIAL_DIR, group["output"])
-    doc.save(output_path)
-    size_kb = os.path.getsize(output_path) // 1024
-    print("  -> 已生成: {} ({}KB)".format(group["output"], size_kb))
+    saved = _save_docx(doc, output_path)
+    size_kb = os.path.getsize(saved) // 1024
+    print("  -> 已生成: {} ({}KB)".format(os.path.basename(saved), size_kb))
+    _report_embedded_images(saved)
 
 
-def main():
+def _save_docx(doc, output_path):
+    """写入目标路径；PermissionError 时另存 *-重新生成.docx。"""
+    try:
+        doc.save(output_path)
+        return output_path
+    except PermissionError:
+        root, ext = os.path.splitext(output_path)
+        alt = "{}-重新生成{}".format(root, ext)
+        doc.save(alt)
+        print(
+            "  [占用] 无法覆盖 {}（请先关闭 Word），已另存: {}".format(
+                os.path.basename(output_path), os.path.basename(alt)
+            )
+        )
+        return alt
+
+
+def _report_embedded_images(docx_path):
+    """导完后报告插图数量与高度，避免「细黑线」被当成缺图。"""
+    if not os.path.isfile(docx_path):
+        return
+    d = Document(docx_path)
+    heights = []
+    for shape in d.inline_shapes:
+        try:
+            heights.append(shape.height.cm)
+        except Exception:
+            continue
+    if not heights:
+        print("  [插图] 未嵌入图片")
+        return
+    min_h = min(heights)
+    max_h = max(heights)
+    print(
+        "  [插图] {} 张，高度 {:.2f}～{:.2f} cm".format(
+            len(heights), min_h, max_h
+        )
+    )
+    if min_h < 1.0:
+        print(
+            "  [警告] 图片高度 < 1cm，多半是固定行距压扁。"
+            "插图段必须单倍行距，不要继承正文 13 磅。"
+        )
+
+
+def _parse_args(argv=None):
+    parser = argparse.ArgumentParser(
+        description="合并鉴别材料 Markdown 为 Word"
+    )
+    parser.add_argument("--workdir", default=None, help="软著工作目录")
+    parser.add_argument(
+        "--only",
+        choices=("program", "document", "all"),
+        default="all",
+        help="只转程序 / 只转文档 / 全部（默认）。补正只改文档时用 document。",
+    )
+    return parser.parse_args(argv)
+
+
+def main(argv=None):
     global MATERIAL_DIR, BASIC_INFO_FILE
 
-    paths_meta = parse_workdir_arg()
+    args = _parse_args(argv)
+    wd_argv = ["--workdir", args.workdir] if args.workdir else []
+    paths_meta = parse_workdir_arg(wd_argv)
     MATERIAL_DIR = paths_meta["material_dir"]
     BASIC_INFO_FILE = paths_meta["basic_info"]
 
@@ -421,6 +543,8 @@ def main():
     print("  MD -> Word 合并转换工具")
     print("  同组 MD 合并为一个 DOCX")
     print("  工作目录: {}".format(paths_meta["workdir"]))
+    if args.only != "all":
+        print("  范围: 仅 {}".format(args.only))
     print("=" * 50)
 
     info = load_software_info()
@@ -428,6 +552,8 @@ def main():
     print()
 
     for group in MERGE_GROUPS:
+        if args.only != "all" and group.get("key") != args.only:
+            continue
         print("[转换] {} -> {}".format(group["name"], group["output"]))
         try:
             merge_and_convert(group, info)

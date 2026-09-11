@@ -65,6 +65,7 @@ class TestSkillLayout(unittest.TestCase):
         "assets/基础资料.template.md",
         "assets/core_business_files.template.json",
         "assets/document_prompt.md",
+        "assets/软件名称说明.template.md",
         "references/workflow-phases.md",
         "references/application-form-fields.md",
         "references/content-redaction.md",
@@ -73,6 +74,7 @@ class TestSkillLayout(unittest.TestCase):
         "references/framework-adapters.md",
         "references/quality-checklist.md",
         "references/submission-rules.md",
+        "references/rejection-hotspots.md",
     ]
 
     def test_required_files_exist(self):
@@ -93,7 +95,7 @@ class TestSkillLayout(unittest.TestCase):
         path = os.path.join(ASSETS, "基础资料.template.md")
         with open(path, "r", encoding="utf-8") as f:
             text = f.read()
-        for key in ("后端项目根目录", "前端项目根目录", "软件全称", "版本号", "著作权人"):
+        for key in ("后端项目根目录", "前端项目根目录", "软件全称", "版本号", "著作权人", "文档类型", "有人机界面"):
             self.assertIn(key, text)
         self.assertIn("后端项目根目录: .", text)
         self.assertIn("权利人署名", text)
@@ -117,7 +119,9 @@ class TestSkillLayout(unittest.TestCase):
         self.assertIn("application-form-fields.md", text)
         self.assertIn("背景→蓝图→流程→模块", text)
         self.assertIn("content-redaction.md", text)
-        self.assertIn("1.2.0", text)
+        self.assertIn("rejection-hotspots.md", text)
+        self.assertIn("--only", text)
+        self.assertIn("软件名称说明.template.md", text)
 
 
 if __name__ == "__main__":

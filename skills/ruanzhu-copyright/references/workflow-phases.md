@@ -28,8 +28,9 @@ python SKILL_ROOT/scripts/<script>.py --workdir docs/软著登记申请
 5. **开发完成日期**推荐：若用户未指定，可用 `git log --format=%aI --all` 全部作者日期取**中位数**对应日历日，并在「已确认」表注明依据；用户指定则用用户值
 6. 缺字段时**逐项向用户确认**，禁止用「（必填）」占位进入后续阶段
 7. `软件的主要功能` 按**业务链路**概括，不要只列无关联的模块名
+8. 填写 `文档类型`（操作手册/设计说明书）与 `有人机界面: 是/否`，二者必须一致。是 → 真机截图；否 → 设计说明书、禁止虚构 UI。`名称需说明的品牌词` 非空时复制 `assets/软件名称说明.template.md` → `<workdir>/软件名称说明.md`。见 `rejection-hotspots.md`
 
-自检：无「（必填）」；config 非盘符绝对路径；短字段 ≤50；主要功能 500～1300；技术特点 ≤100；编程语言在列表内；首页三行署名已规划。
+自检：无「（必填）」；config 非盘符绝对路径；短字段 ≤50；主要功能 500～1300；技术特点 ≤100；编程语言在列表内；首页三行署名已规划；`文档类型` 与 `有人机界面` 已填且一致。
 
 ---
 
@@ -107,10 +108,12 @@ python SKILL_ROOT/scripts/generate_program_identification.py --workdir docs/软�
 
 ## Phase 3 — 文档鉴别材料 MD
 
-1. **必须先读** `references/document-generation.md` 与 `assets/document_prompt.md`
+1. **必须先读** `references/document-generation.md`、`assets/document_prompt.md` 与 `references/rejection-hotspots.md`
 2. 按 **背景 → 蓝图 → 流程 → 模块** 顺序写 `document_identification-*.md`
 3. **禁止**模块优先、无总览链路的说明书
 4. 遵守 `content-redaction.md`（首页说明含权利人署名三行；其余正文默认无单位全称、无绝对路径）
+5. `有人机界面: 是`：向用户要真机 PNG（`md素材/screenshots/`），概述后插入总览图，流程章逐步插图；缺图则停，不导出带【缺图】的补正稿
+6. `有人机界面: 否`：按设计说明书写结构图/时序图，禁止虚构操作界面
 
 ---
 
@@ -123,6 +126,15 @@ python SKILL_ROOT/scripts/redact_materials.py --workdir docs/软著登记申请
 python SKILL_ROOT/scripts/md2docx.py --workdir docs/软著登记申请
 python SKILL_ROOT/scripts/export_identification_pdf.py --workdir docs/软著登记申请
 ```
+
+补正只改文档（或只改程序）时，两步都加 `--only`，避免覆盖未点名的那份：
+
+```bash
+python SKILL_ROOT/scripts/md2docx.py --workdir docs/软著登记申请 --only document
+python SKILL_ROOT/scripts/export_identification_pdf.py --workdir docs/软著登记申请 --only document
+```
+
+docx / PDF 若正被 Word 或阅读器打开：md2docx 会另存 `*-重新生成.docx`；export 无法覆盖已打开的 PDF 时会报错，关掉后重跑。导完打开文档抽查插图高度（不能是细黑线），见 `rejection-hotspots.md`。
 
 输出：
 

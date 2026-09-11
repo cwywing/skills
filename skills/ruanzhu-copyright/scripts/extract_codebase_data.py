@@ -290,6 +290,8 @@ def extract_controller_data(filepath):
 def extract_all_controllers(ctrl_dir):
     """提取所有 Controller 数据"""
     controllers = []
+    if not ctrl_dir or not os.path.isdir(ctrl_dir):
+        return controllers
     for filepath in find_php_files(ctrl_dir, recursive=False):
         data = extract_controller_data(filepath)
         if data:
