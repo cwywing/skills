@@ -24,6 +24,7 @@ GitHub 仓库名叫 `skills`；内层 `skills/` 是
 | [h5-style-unify](skills/h5-style-unify/) | 统一**既有** H5 / 移动端项目的风格配色设计 — token 真相源、机器门禁、验收页 |
 | [swiftui-style-unify](skills/swiftui-style-unify/) | 同一套五环统一法用于**既有** SwiftUI / iOS 应用 — `DesignTokens` 命名空间、Dynamic Type 排版、ripgrep 门禁、共享 SoT 代码生成 |
 | [ruanzhu-copyright](skills/ruanzhu-copyright/) | 准备中国大陆 **软件著作权（软著）** 鉴别材料 — 程序/文档鉴别材料、运行截图与名称说明补正、脱敏、Word/PDF 导出 |
+| [ios-app-store-submission](skills/ios-app-store-submission/) | 把 iOS 应用从「代码就绪」推进到「已提交 App Store 审核」— 无头构建上传、TestFlight 访问、审核材料、就绪度门禁、驳回处理、按版本台账 |
 
 它们可以组合：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring**
 把重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用
@@ -33,6 +34,9 @@ GitHub 仓库名叫 `skills`；内层 `skills/` 是
 lint 门禁时，用 **h5-style-unify**。SwiftUI 应用做同样的统一时用
 **swiftui-style-unify**；同一产品两端并存时，两个技能在共享 web SoT 处组合。交付物
 是软著登记材料（不是 code review、许可证或商标）时，用 **ruanzhu-copyright**。
+只要 App 需要走到、扛过或重试 App Review，就用 **ios-app-store-submission**——
+哪怕只做其中一个切片（重传 build、TestFlight 邀请丢失、截图核查），因为每个
+切片共享同一套事实表、安全门禁与台账规则。
 
 ## 安装
 
@@ -70,6 +74,7 @@ cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-consol
 cp -r skills/h5-style-unify         /path/to/project/.cursor/skills/h5-style-unify
 cp -r skills/swiftui-style-unify    /path/to/project/.cursor/skills/swiftui-style-unify
 cp -r skills/ruanzhu-copyright      /path/to/project/.cursor/skills/ruanzhu-copyright
+cp -r skills/ios-app-store-submission /path/to/project/.agents/skills/ios-app-store-submission
 
 # Claude Code — 同一文件夹，目标改为 .claude/skills/<name>
 cp -r skills/<name> /path/to/project/.claude/skills/<name>
@@ -101,7 +106,8 @@ skills/                          # 仓库根目录（GitHub 名，可改）
     ├── admin-console-ux/
     ├── h5-style-unify/
     ├── swiftui-style-unify/
-    └── ruanzhu-copyright/
+    ├── ruanzhu-copyright/
+    └── ios-app-store-submission/
 ```
 
 - [harness-first/](skills/harness-first/) — 五阶段门控式项目启动
@@ -139,6 +145,11 @@ skills/                          # 仓库根目录（GitHub 名，可改）
   - [assets/](skills/ruanzhu-copyright/assets/) — 基础资料模板、文档 prompt、多栈 demo
   - [references/](skills/ruanzhu-copyright/references/) — 分阶段手册、申请表字段、脱敏、框架适配
   - [tests/](skills/ruanzhu-copyright/tests/) — 脚本链路夹具
+- [ios-app-store-submission/](skills/ios-app-store-submission/) — iOS App Store 提审全流程（无头 CLI）
+  - [SKILL.md](skills/ios-app-store-submission/SKILL.md) — 六阶段门控工作流 + 风险分层 + bright lines（从这里开始）
+  - [references/](skills/ios-app-store-submission/references/) — 构建上传错误对照、审核就绪、截图产线、TestFlight 邀请链、裸 API 端点陷阱、台账纪律
+  - [scripts/](skills/ios-app-store-submission/scripts/) — 裸 ASC API 执行器（ES256 JWT）+ 截图状态栏修图
+  - [assets/](skills/ios-app-store-submission/assets/) — 事实表/台账/备注/报告骨架 + 手动导出 options 模板
 
 按需创建 `scripts/`、`assets/`、`tests/` 子目录即可，并非每个技能都需要。
 

@@ -25,6 +25,7 @@ skill folders onto the repo root — installers will miss them.
 | [h5-style-unify](skills/h5-style-unify/) | Unifying style/color/design for an **existing** H5 / mobile-web project — token SoT, machine gate, acceptance page |
 | [swiftui-style-unify](skills/swiftui-style-unify/) | The same five-ring unification for an **existing** SwiftUI / iOS app — `DesignTokens` namespace, Dynamic Type typography, ripgrep gate, shared-SoT codegen |
 | [ruanzhu-copyright](skills/ruanzhu-copyright/) | Preparing China **软件著作权** (软著) identification materials — 程序/文档鉴别材料, screenshot/name-correction supplements, redaction, Word/PDF export |
+| [ios-app-store-submission](skills/ios-app-store-submission/) | Driving an iOS app from ready code to submitted-for-review on App Store Connect — headless build/upload, TestFlight access, review materials, readiness gates, rejection handling, per-version journal |
 
 They compose: kick off with **harness-first**, then capture stable workflows with
 **skill-authoring** once the harness is running. Use **geo-article-generator**
@@ -36,7 +37,11 @@ needs a full-page walkthrough against mainstream mid-console habits. Use
 styles converged into one token source with a lint gate. Use **swiftui-style-unify**
 for the same unification on a SwiftUI app; when both ends of one product exist, the
 two compose at a shared web SoT. Use **ruanzhu-copyright** when the deliverable is
-软著登记材料 (not a code review or license/trademark filing).
+软著登记材料 (not a code review or license/trademark filing). Use
+**ios-app-store-submission** whenever an app needs to reach, survive, or retry
+App Review — even for one slice of it (re-upload a build, a lost TestFlight
+invite, a screenshot audit), since every slice shares the same fact sheet,
+safety gates, and journal rules.
 
 ## Install
 
@@ -75,6 +80,7 @@ cp -r skills/admin-console-ux       /path/to/project/.cursor/skills/admin-consol
 cp -r skills/h5-style-unify         /path/to/project/.cursor/skills/h5-style-unify
 cp -r skills/swiftui-style-unify    /path/to/project/.cursor/skills/swiftui-style-unify
 cp -r skills/ruanzhu-copyright      /path/to/project/.cursor/skills/ruanzhu-copyright
+cp -r skills/ios-app-store-submission /path/to/project/.agents/skills/ios-app-store-submission
 
 # Claude Code — same folders, destination .claude/skills/<name>
 cp -r skills/<name> /path/to/project/.claude/skills/<name>
