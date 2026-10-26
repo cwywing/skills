@@ -34,11 +34,14 @@ sheet (SKILL.md Phase 0) — never invent a value.
 ## Step 1 — bump the build number
 
 App Store Connect rejects a re-upload of the same (marketing version, build)
-pair, so bump the build number before every archive. XcodeGen projects: bump
-`CURRENT_PROJECT_VERSION` in `project.yml`, then `xcodegen generate` (a MUST —
-hand-editing the `.xcodeproj` drifts from the spec). Plain `.xcodeproj`
-projects: `agvtool new-version -all <N>` from the project root. Commit the bump
-with the upload bookkeeping, not silently.
+pair, so bump the build number before every archive. Three routes: XcodeGen
+projects bump `CURRENT_PROJECT_VERSION` in `project.yml`, then `xcodegen
+generate` (a MUST — hand-editing the `.xcodeproj` drifts from the spec); plain
+`.xcodeproj` projects run `agvtool new-version -all <N>` from the project
+root; CI runners that would commit a bump on every run can instead pass it on
+the archive command line — `CURRENT_PROJECT_VERSION=$(date +%s)` — where the
+epoch satisfies uniqueness by construction (non-sequential numbers are the
+trade-off). Commit the bump with the upload bookkeeping, not silently.
 
 ## Step 2 — archive Release
 
@@ -51,8 +54,15 @@ xcodebuild archive \
 ```
 
 `generic/platform=iOS` builds the device slice without needing a device attached.
-Verify the archive before exporting — exporting a wrong-version archive wastes a
-15–45 minute processing cycle:
+On a runner with no Apple ID logged into Xcode, bare `-allowProvisioningUpdates`
+has nothing to authenticate with — add the API-key trio so xcodebuild manages
+signing through the ASC API: `-authenticationKeyPath <P8>
+-authenticationKeyID <KID> -authenticationKeyIssuerID <ISSUER>`. The same three
+flags on `-exportArchive` unlock automatic export too, making Step 3's manual
+profile unnecessary; the manual-profile path stays as the alternative when you
+want profiles pinned rather than API-managed. Verify the archive before
+exporting — exporting a wrong-version archive wastes a 15–45 minute processing
+cycle:
 
 ```bash
 /usr/libexec/PlistBuddy -c "Print :CFBundleShortVersionString" -c "Print :CFBundleVersion" \

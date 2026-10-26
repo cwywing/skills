@@ -122,7 +122,10 @@ asc screenshots list --version-id <VERSION_ID> --locale <LOCALE>   # sets + per-
 - **Listing metadata**: content rights (`DOES_NOT_USE_THIRD_PARTY_CONTENT`
   unless licensed), categories (primary + secondary, ids are the uppercase
   enums), and `usesIdfa=false` wherever the app has no ads/trackers — a stale
-  IDFA flag invites 4.8/rejection friction.
+  IDFA flag invites 4.8/rejection friction. The validate warning
+  `metadata.keywords.overlap_subtitle` (fires per locale) is fixed by removing
+  the words the subtitle already contains from the keyword field — warnings
+  don't block, but the dedup is free search relevance.
 - **Export compliance**: handled at build level (see build-and-upload.md).
 - **Pricing & availability**: free or paid schedule plus territory list;
   `asc validate` reports `pricingScheduleMissing` / `appAvailabilityMissing`

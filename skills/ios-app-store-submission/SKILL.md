@@ -17,7 +17,7 @@ description: >-
   — every slice shares the same fact sheet, safety gates, and journal rules. Do
   not use it for Android/Play Store releases, local debug builds or simulator
   work, feature development, or writing store copy with no ASC access.
-version: 0.2.0
+version: 0.2.1
 ---
 
 # iOS App Store Submission
