@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.w3.org/2002/04/23/DTD/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Manual App Store export options. Fill every <PLACEHOLDER> from the
+	     project fact sheet. The profile name here must exactly match an
+	     installed profile (see references/build-and-upload.md step 3). -->
+	<key>destination</key>
+	<string>export</string>
+	<key>method</key>
+	<string>app-store-connect</string>
+	<key>provisioningProfiles</key>
+	<dict>
+		<key>&lt;BUNDLE_ID&gt;</key>
+		<string>&lt;PROFILE_NAME&gt;</string>
+	</dict>
+	<key>signingCertificate</key>
+	<string>Apple Distribution: &lt;CERT_NAME&gt; (&lt;TEAM_ID&gt;)</string>
+	<key>signingStyle</key>
+	<string>manual</string>
+	<key>stripSwiftSymbols</key>
+	<true/>
+	<key>teamID</key>
+	<string>&lt;TEAM_ID&gt;</string>
+	<key>uploadSymbols</key>
+	<true/>
+</dict>
+</plist>
