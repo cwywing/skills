@@ -17,7 +17,7 @@ description: >-
   — every slice shares the same fact sheet, safety gates, and journal rules. Do
   not use it for Android/Play Store releases, local debug builds or simulator
   work, feature development, or writing store copy with no ASC access.
-version: 0.2.1
+version: 0.2.2
 ---
 
 # iOS App Store Submission
@@ -136,7 +136,11 @@ first journal write of a session).
 - "TestFlight 收不到邀请 / 加进内测组" → Phases 0, 3, 5.
 - "查一下截图/validate/能不能提交" → Phases 0, 1 (+4 read-only), 5.
 - "重拍/上传商店截图" → Phases 0, 4 (capture gate), 5.
-- "被拒了" → journal rejection file first, then fix, then Phases 1, 2, 5.
+- "被拒了" → journal rejection file first (reasons are API-invisible: verbatim
+  text comes from Resolution Center / Apple's email; no fix before it lands),
+  then fix, then Phases 1, 2, 5.
+- "提交后查审核状态" → Phases 0, 1, 5; a REJECTED state with clean validate
+  means review-content rejection, not metadata.
 - Full prep from scratch → all phases.
 
 ## Worked example

@@ -19,6 +19,15 @@ App Privacy publish state is the known case the public API cannot see).
 warnings (declarations only checkable on the web). Re-run both after every
 mutation in this phase; a green from yesterday is not a green today.
 
+After a version has been **submitted**, the gate moves: `validate` can read 0
+blocking while the version is REJECTED, because review rejections are
+review-content, not metadata. In that state the real blocker surfaces as
+`review.submission.unresolved_issues` in `asc review doctor` and
+`asc status --app` — and the reason text itself is API-invisible (see
+journal-discipline.md rejection rule: Resolution Center / email verbatim
+first). A clean validate on a rejected version therefore means "metadata is
+not the problem", never "nothing is wrong".
+
 Map API checks to human blockers honestly — the API consolidates. Several human
 gaps (contact phone, demo credentials, screen-recording URL) all surface as the
 single check `review_details.missing`, because they all live inside the review

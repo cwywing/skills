@@ -49,6 +49,15 @@ both; don't migrate an existing working form for aesthetics.
    interpretation, then the fix plan. After the fix ships, append the commit
    and the draft reply to Apple in the same file. Fixing from a paraphrase
    fixes the wrong thing often enough that this order is not optional.
+   **Rejection reasons are not API-visible** — the ASC API only flips the
+   version to REJECTED (`UNRESOLVED_ISSUES`); the text itself lives in the
+   Resolution Center (web) and Apple's rejection email. When the verbatim text
+   is not yet in hand, create the file anyway with an explicit PENDING block in
+   section 1 naming those two sources and the direct Resolution Center URL,
+   record the machine-verified facts (submission id, date, what validate does
+   and does not show), append the timeline row, and ask the human to paste —
+   but start no fix. The placeholder file is the tripwire that prevents a
+   paraphrased fix from racing ahead of the real wording.
 3. **Seal released versions; open a new directory for the next version.** A
    sealed directory is evidence; editing it later contaminates every conclusion
    drawn from it.
