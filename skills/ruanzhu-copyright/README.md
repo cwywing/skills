@@ -53,6 +53,11 @@ python .cursor/skills/ruanzhu-copyright/scripts/export_identification_pdf.py --w
 - `文档类型` 与 `有人机界面` 必须一致
 - Markdown 图片 `![图注](screenshots/….png)`；插图段单倍行距（否则 Word 里变成细黑线）
 - `md2docx` / `export` 支持 `--only document|program`；docx 被占用则另存 `*-重新生成.docx`
+- 图注只写该张截图上看得见的内容；打码后不要写「未做任何加工」
+- 窗口标题或关于页版本与申请表不一致时，写「安装包显示名 / 构建号」，不要把标题栏称作申请表全称
+- 截图先把长边压到约 1280 再嵌入，避免上传 PDF 到数十 MB
+- 代码围栏里的流程图导出后抽一页：汉字不要整行只用 Consolas，TTC 要同时指定字体名
+- 截图在目标系统上手拍；不要在正在使用的桌面循环拉起窗口自动化
 
 ## 1.5.x 要点
 
