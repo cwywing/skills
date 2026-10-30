@@ -2,7 +2,7 @@
 name: ruanzhu-copyright
 description: This skill should be used whenever the user asks to prepare, generate, or improve China software copyright (软著) registration materials — including 程序鉴别材料, 文档鉴别材料, 基础资料, codebase extraction, or Word/PDF export for 软件著作权. Trigger on phrases like "做软著", "生成程序鉴别材料", "文档鉴别材料", "软著登记", "软件著作权", "鉴别材料.docx", "导出软著PDF", "软著补正", "软件名称说明", "缺少软件运行截图", or "帮我出软著源码和说明书". Use it even when the user only says "按软著要求导出代码/说明书" without naming phases — the full Phase 0–4 pipeline (含申请表字数校验与上传 PDF) is the goal. When rewriting the 说明书, always follow background→blueprint→flows→modules (never module-first) and content-redaction rules. For UI software (小程序/APP/Web) embed real running screenshots; for no-UI backends use design-spec diagrams and never invent screens. Works for any language or framework (read framework-adapters when the default extract layout does not match). Do not use for general code review, license compliance (SPDX), or trademark filing.
 metadata:
-  version: "1.6.3"
+  version: "1.6.4"
 ---
 
 # 软著鉴别材料生成（ruanzhu-copyright）
