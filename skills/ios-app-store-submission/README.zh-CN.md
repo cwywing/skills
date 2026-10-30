@@ -1,26 +1,28 @@
 # ios-app-store-submission
 
+[English](README.md)
+
 无头（headless）iOS 提审 skill：用 `xcodebuild` + `asc`（App Store Connect CLI）
 把「代码就绪」推进到「已提交审核」，并用按版本归档的提审台账保证跨天、多人
 协作随时可复盘。覆盖 build 上传、TestFlight 访问、审核材料、就绪度门禁、
 驳回处理全流程。
 
 编写遵循 [skill-authoring](../skill-authoring/) 的 house style；内容提炼自
-两个 App 的真实 v1.0 提审实战（2026-10）——`references/`
-里每条规则背后都有一次真实踩过的坑。
+两个 App 的真实 v1.0 提审实战（2026-10），`references/` 里每条规则背后
+都对应一次真实踩过的坑。
 
-## 权威源 —— 下游只安装，不 forks
+## 权威源：下游只安装，不 fork
 
 **发布主页：[cwywing/skills](https://github.com/cwywing/skills) →
-`skills/ios-app-store-submission/`** —— 全组织 iOS 仓库共用这份 skill 的唯一
-事实源。同步规则：在已安装的副本里发现缺陷或学到新东西，改动**落到发布主页**
-（提审进行中可先暂存在工作仓库，结束后立即晋升），然后下游重新安装——不要
+`skills/ios-app-store-submission/`**，这是全组织 iOS 仓库共用这份 skill 的唯一
+事实源。同步规则：在已安装的副本里发现缺陷或学到新东西，改动落到发布主页
+（提审进行中可先暂存在工作仓库，结束后立即晋升），然后下游重新安装。不要
 就地改副本，否则分叉必然漂移。项目差异属于各项目的事实表与台账（见下方定制
 清单），永远不进 skill 正文。
 
 ## 安装
 
-整个目录拷进项目的 skill 目录（不要拍平——目录本身就是 skill）：
+整个目录拷进项目的 skill 目录，不要拍平，目录本身就是 skill：
 
 ```bash
 # 从已提交本目录的仓库（权威源）导出到目标项目
@@ -32,7 +34,7 @@ git archive HEAD .agents/skills/ios-app-store-submission | tar -x -C /path/to/pr
 构建机依赖：Xcode、已认证的 `asc` CLI（Rork asc）、Apple Distribution 证书
 所在的已知钥匙串。
 
-## 每个项目一次的定制清单
+## 每个项目初始化时的定制清单
 
 - 把事实表模板里「来源」列填成*你的*权威位置（release-map 文档路径、
   `project.yml` 还是 `Info.plist`、钥匙串路径、readiness JSON 路径）。
@@ -44,7 +46,7 @@ git archive HEAD .agents/skills/ios-app-store-submission | tar -x -C /path/to/pr
 - 裸 API 兜底需要 `python3` + `cryptography` 包（凭据来自
   `ASC_KEY_ID`/`ASC_ISSUER_ID`/`ASC_KEY_PATH` 或 `~/.appstoreconnect/*.env`）；
   修图脚本用 `swift scripts/retouch_status_bar.swift` 直接跑。
-- 其余保持原样：阶段、门禁、bright lines 是刻意做成项目无关的——它们沉淀
+- 其余保持原样：阶段、门禁、bright lines 是刻意做成项目无关的，沉淀
   的是 App Store 机制，不是某个 app 的选择。
 
 ## 目录结构

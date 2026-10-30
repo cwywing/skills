@@ -27,21 +27,21 @@ skill folders onto the repo root — installers will miss them.
 | [ruanzhu-copyright](skills/ruanzhu-copyright/) | Preparing China **软件著作权** (软著) identification materials — 程序/文档鉴别材料, screenshot/name-correction supplements, redaction, Word/PDF export |
 | [ios-app-store-submission](skills/ios-app-store-submission/) | Driving an iOS app from ready code to submitted-for-review on App Store Connect — headless build/upload, TestFlight access, review materials, readiness gates, rejection handling, per-version journal |
 
-They compose: kick off with **harness-first**, then capture stable workflows with
-**skill-authoring** once the harness is running. Use **geo-article-generator**
-whenever content needs to be legible to generative AI search, not just human readers.
-Use **ai-dev-pipeline** when a PRD or plan should become a multi-task CLI delivery
-loop instead of one giant agent run. Use **admin-console-ux** when an ops console
-needs a full-page walkthrough against mainstream mid-console habits. Use
-**h5-style-unify** when an existing H5/mobile-web codebase needs its colors and
-styles converged into one token source with a lint gate. Use **swiftui-style-unify**
-for the same unification on a SwiftUI app; when both ends of one product exist, the
-two compose at a shared web SoT. Use **ruanzhu-copyright** when the deliverable is
-软著登记材料 (not a code review or license/trademark filing). Use
-**ios-app-store-submission** whenever an app needs to reach, survive, or retry
-App Review — even for one slice of it (re-upload a build, a lost TestFlight
-invite, a screenshot audit), since every slice shares the same fact sheet,
-safety gates, and journal rules.
+They compose. Start a new project with **harness-first**, and once the harness
+is running, capture its stable workflows as skills with **skill-authoring**.
+Content that should be legible to generative AI search, not just human readers,
+belongs to **geo-article-generator**. A PRD or plan that deserves a multi-task
+CLI delivery loop instead of one giant agent run goes through
+**ai-dev-pipeline**. For an ops console, **admin-console-ux** walks it against
+mainstream mid-console habits. **h5-style-unify** converges an existing
+H5/mobile-web codebase onto one token source with a lint gate, and
+**swiftui-style-unify** does the same for a SwiftUI app — when both ends of one
+product exist, the two meet at a shared web SoT. Deliver 软著登记材料 (not a code
+review or license/trademark filing) with **ruanzhu-copyright**. And whenever an
+app needs to reach, survive, or retry App Review — even for one slice of it,
+like re-uploading a build, chasing a lost TestFlight invite, or auditing
+screenshots — that's **ios-app-store-submission**, because every slice shares
+the same fact sheet, safety gates, and journal rules.
 
 ## Install
 
@@ -114,7 +114,8 @@ skills/                          # repo root (GitHub name; arbitrary)
     ├── admin-console-ux/
     ├── h5-style-unify/
     ├── swiftui-style-unify/
-    └── ruanzhu-copyright/
+    ├── ruanzhu-copyright/
+    └── ios-app-store-submission/
 ```
 
 - [harness-first/](skills/harness-first/) — 5-phase gated project bootstrap
@@ -152,6 +153,11 @@ skills/                          # repo root (GitHub name; arbitrary)
   - [assets/](skills/ruanzhu-copyright/assets/) — 基础资料 templates, document prompt, multi-stack demos
   - [references/](skills/ruanzhu-copyright/references/) — phases, application-form fields, redaction, framework adapters
   - [tests/](skills/ruanzhu-copyright/tests/) — script-chain fixtures
+- [ios-app-store-submission/](skills/ios-app-store-submission/) — App Store submission, headless CLI
+  - [SKILL.md](skills/ios-app-store-submission/SKILL.md) — six-phase gated workflow + risk tiers + bright lines (start here)
+  - [references/](skills/ios-app-store-submission/references/) — build/upload error map, review readiness, screenshot line, TestFlight invite chain, raw-API traps, journal discipline
+  - [scripts/](skills/ios-app-store-submission/scripts/) — raw ASC API executor (ES256 JWT) + screenshot status-bar retouch
+  - [assets/](skills/ios-app-store-submission/assets/) — fact sheet / journal / notes / report skeletons + manual export options template
 
 Optional subdirectories (`scripts/`, `assets/`, `tests/`) are created per-skill
 when needed — not every skill requires them.

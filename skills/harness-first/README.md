@@ -2,9 +2,9 @@
 
 [中文](README.zh-CN.md)
 
-A portable, project-agnostic Agent Skill. It makes the first move in any new
-project building a **self-verifying harness** — not writing code or a prompt —
-through five gated phases (reality → boundaries → minimum link → eval → Maker-Checker).
+A portable, project-agnostic Agent Skill: in any new project the first move is
+building a **self-verifying harness** (not writing code or a prompt) through five
+gated phases — reality → boundaries → minimum link → eval → Maker-Checker.
 
 ## Install into a new project
 

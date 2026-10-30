@@ -2,7 +2,8 @@
 
 [English](README.md)
 
-可移植的 Agent Skill — 撰写生产级技能的**工艺层**。它位于官方结构规范（skill-development）与评测/打包流程（skill-creator）之间。
+撰写生产级技能的**工艺层**，一个可移植的 Agent Skill。位置在官方结构规范
+（skill-development）和评测/打包流程（skill-creator）之间。
 
 ## 安装到项目
 
@@ -27,7 +28,8 @@ cp -r skills/skill-authoring /path/to/project/.claude/skills/skill-authoring
   - [mutation-safety.md](references/mutation-safety.md) — 会改动真实状态的写操作安全
 - [README.md](README.md) / [README.zh-CN.md](README.zh-CN.md) — 本文件
 
-仅在技能需要确定性代码或输出模板时，再添加 `scripts/` 或 `assets/` — 本元技能本身不需要。
+只在技能确实需要确定性代码或输出模板时才添加 `scripts/` 或 `assets/`，本元技能
+自己用不上。
 
 ## 配套技能
 

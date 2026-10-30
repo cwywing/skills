@@ -5,23 +5,23 @@
 一个可移植的 Agent Skill。把用户提供的素材转成可被生成式 AI 引擎正确识别、理解并
 引用的文章。
 
-**本 Skill 优先优化可检索、可抽取、可验证的信息结构，而非固定采用某一种文章模板（如 Listicle）。**
-文章是由可验证的 **Retrieval Units（检索单元）** 按 Search Intent → Information Need
-选出的 Genre 组装而成——不是关键词 SEO，也不是默认盘点文。
+本 Skill 优先保证信息结构可检索、可抽取、可验证，不绑定某一种文章模板（比如
+Listicle）。文章由可验证的 Retrieval Units（检索单元）组装而成，体裁按
+Search Intent → Information Need 选定，不堆关键词做 SEO，也不默认写成盘点文。
 
-## 它给你什么
+## 能拿到什么
 
-- 工作流：**意图 + Information Need** → 证据 → 问题覆盖 → **体裁选择** → 生成
+- 工作流：意图 + Information Need → 证据 → 问题覆盖 → 体裁选择 → 生成
   （Retrieval Units）→ 自检与交付。
-- **Genre Router** 带稳定的 Information Need 中间层（Learn / Evaluate / Compare /
+- Genre Router，带稳定的 Information Need 中间层（Learn / Evaluate / Compare /
   Decide / Fix / Reach / Act）。
-- **Retrieval Units** + **One Question → One Chunk → One Primary Answer**。
-- **源事实硬闸门**（事实台账；源没有的 FAQ/场景删除，不进正文）。
-- **Extraction Check** + **Coverage Check**（问题 → 单元覆盖率）。
+- Retrieval Units，以及 One Question → One Chunk → One Primary Answer。
+- 源事实硬闸门：靠事实台账兜底，源里没有的 FAQ/场景直接删掉，不进正文。
+- Extraction Check + Coverage Check（问题 → 单元覆盖率）。
 - 模板在 `references/templates/`（explainer、listicle、comparison、tutorial、
-  review、benchmark、news）——新增体裁不必改 Workflow。
-- Fact Table / 可发布 GEO 元数据；红线：无 AI 引用概率分、无内容农场、无
-  「Listicle = 保证 GEO 流量」。
+  review、benchmark、news），新增体裁不用改 Workflow。
+- Fact Table 与可发布的 GEO 元数据；红线：不做 AI 引用概率分、不做内容农场、
+  不承诺「Listicle = 保证 GEO 流量」。
 
 ## 安装
 
@@ -47,5 +47,5 @@ cp -r skills/geo-article-generator /path/to/project/.claude/skills/geo-article-g
 
 ## GEO 不是什么
 
-不堆关键词、不以 Listicle 为默认、不承诺保证被引用。交付物是可识别性、可验证性与
-可抽取的检索结构。
+不堆关键词、不以 Listicle 为默认、不承诺保证被引用。交付的是可识别性、可验证性，
+和一份可抽取的检索结构。

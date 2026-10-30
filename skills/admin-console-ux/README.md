@@ -2,8 +2,8 @@
 
 [中文](README.zh-CN.md)
 
-A portable Agent Skill for polishing **admin / backoffice / 管理后台** consoles so
-display and interaction match mainstream mid-console **ops habits** — not
+A portable Agent Skill for polishing admin / backoffice / 管理后台 consoles, so
+display and interaction match mainstream mid-console ops habits rather than
 developer-invented chrome or marketing aesthetics.
 
 ## Install into a project

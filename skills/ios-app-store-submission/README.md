@@ -1,5 +1,7 @@
 # ios-app-store-submission
 
+[中文](README.zh-CN.md)
+
 Headless iOS App Store submission skill: take an app from ready code to
 submitted-for-review via `xcodebuild` + the `asc` (App Store Connect CLI), and
 keep a per-version journal so multi-day, multi-operator work stays

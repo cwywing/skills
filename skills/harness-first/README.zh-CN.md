@@ -2,7 +2,9 @@
 
 [English](README.md)
 
-可移植、与项目无关的 Agent Skill。在任何新项目中，第一步不是写代码或 prompt，而是通过五个门控阶段搭建**自验证执行 harness**（现实模型 → 边界划分 → 最小可运行链路 → 评测优先 → Maker-Checker 循环）。
+可移植、与项目无关的 Agent Skill。在任何新项目里，第一步都不是写代码或写 prompt，
+而是先通过五个门控阶段搭一套自验证 harness（现实模型 → 边界划分 → 最小可运行链路 →
+评测优先 → Maker-Checker 循环）。
 
 ## 安装到新项目
 
@@ -16,7 +18,8 @@ cp -r skills/harness-first /path/to/new-project/.cursor/skills/harness-first
 cp -r skills/harness-first /path/to/new-project/.claude/skills/harness-first
 ```
 
-两个工具均会自动发现。在 greenfield 场景下直接开始，或说「bootstrap this project」「let's build X」「help me architect this」即可触发。
+两个工具都会自动发现。greenfield 项目里直接开工即可触发，也可以说
+「bootstrap this project」「let's build X」「help me architect this」。
 
 ## 目录结构
 

@@ -2,7 +2,7 @@
 
 [中文](README.zh-CN.md)
 
-A portable Agent Skill — the **craft layer** for writing production-grade skills.
+The **craft layer** for writing production-grade skills, as a portable Agent Skill.
 It sits between the official structural spec (skill-development) and the eval/package
 loop (skill-creator).
 

@@ -2,8 +2,8 @@
 
 [English](README.md)
 
-可移植 Agent Skill：优化 **管理后台 / admin / backoffice** 的交互与显示，对齐主流中后台
-**运维使用习惯** — 不是开发者闭门造车，也不是营销风 UI。
+优化管理后台（admin / backoffice）交互与显示的可移植 Agent Skill，对齐主流中后台
+的运维使用习惯，既不闭门造车，也不做成营销风 UI。
 
 ## 安装到项目
 
@@ -15,8 +15,8 @@ cp -r skills/admin-console-ux /path/to/project/.cursor/skills/admin-console-ux
 cp -r skills/admin-console-ux /path/to/project/.claude/skills/admin-console-ux
 ```
 
-在说「优化管理后台」「后台样式/交互」「操作列歪了」「按运营习惯过一遍」
-「修 AI 生成的后台」，或贴后台截图要求做成真正运维台时触发。
+说「优化管理后台」「后台样式/交互」「操作列歪了」「按运营习惯过一遍」
+「修 AI 生成的后台」，或者贴一张后台截图要求做成真正能用的运维台，就会触发。
 
 ## 目录结构
 
@@ -30,5 +30,5 @@ cp -r skills/admin-console-ux /path/to/project/.claude/skills/admin-console-ux
 ## 配套技能
 
 - **[skill-authoring](../skill-authoring/)** — 改本 SKILL.md 时的工艺层
-- 优先对齐项目已有设计体系（Ant Design / Element / Naive / Arco）；
-  本技能管 UX/流程，不另起组件库
+- 优先对齐项目已有的设计体系（Ant Design / Element / Naive / Arco）；
+  本技能只管 UX 和流程，不另起组件库

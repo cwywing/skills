@@ -6,37 +6,37 @@
 下的独立文件夹（一份 `SKILL.md`，按需带 `scripts/`、`references/`、`assets/`、
 `tests/`）。把该文件夹复制到项目的 skill 目录，或用 `gh skill` 安装。
 
-GitHub 仓库名叫 `skills`；内层 `skills/` 是
-[Agent Skills](https://agentskills.io/specification) 的**集合仓**约定
+GitHub 仓库名叫 `skills`，内层 `skills/` 用的是
+[Agent Skills](https://agentskills.io/specification) 的集合仓约定
 （`skills/*/SKILL.md`），供 `gh skill install` 扫描。它和 Cursor 安装后的路径
-（`.cursor/skills/<name>/`）不是同一层，也不重复。不要把各个 skill 摊到仓库根目录
-——安装器会扫不到。
+（`.cursor/skills/<name>/`）不是同一层，也不冲突。别把各个 skill 摊到仓库根目录，
+安装器会扫不到。
 
 ## 技能一览
 
 | 技能 | 适用场景 |
 |------|----------|
-| [harness-first](skills/harness-first/) | **新项目**启动 — 在写功能代码或 prompt 之前，先搭建自验证执行 harness |
+| [harness-first](skills/harness-first/) | 新项目开工：写功能代码或 prompt 之前，先把自验证 harness 搭起来 |
 | [skill-authoring](skills/skill-authoring/) | 撰写、审查或改进任意 SKILL.md，达到生产级质量 |
 | [geo-article-generator](skills/geo-article-generator/) | 把提供的素材资料落地成一篇可被生成式 AI 引擎识别、理解并引用的文章 |
 | [ai-dev-pipeline](skills/ai-dev-pipeline/) | 把计划拆成有序任务，用 Cursor Agent CLI（`agent -p --force`）持续交付 |
-| [admin-console-ux](skills/admin-console-ux/) | 优化管理后台交互与显示，对齐主流中后台**运维使用习惯** |
-| [h5-style-unify](skills/h5-style-unify/) | 统一**既有** H5 / 移动端项目的风格配色设计 — token 真相源、机器门禁、验收页 |
-| [swiftui-style-unify](skills/swiftui-style-unify/) | 同一套五环统一法用于**既有** SwiftUI / iOS 应用 — `DesignTokens` 命名空间、Dynamic Type 排版、ripgrep 门禁、共享 SoT 代码生成 |
-| [ruanzhu-copyright](skills/ruanzhu-copyright/) | 准备中国大陆 **软件著作权（软著）** 鉴别材料 — 程序/文档鉴别材料、运行截图与名称说明补正、脱敏、Word/PDF 导出 |
-| [ios-app-store-submission](skills/ios-app-store-submission/) | 把 iOS 应用从「代码就绪」推进到「已提交 App Store 审核」— 无头构建上传、TestFlight 访问、审核材料、就绪度门禁、驳回处理、按版本台账 |
+| [admin-console-ux](skills/admin-console-ux/) | 优化管理后台交互与显示，对齐主流中后台的运维使用习惯 |
+| [h5-style-unify](skills/h5-style-unify/) | 给既有 H5 / 移动端项目统一风格配色：token 真相源、机器门禁、验收页 |
+| [swiftui-style-unify](skills/swiftui-style-unify/) | 同一套五环方法用在既有 SwiftUI / iOS 应用上：`DesignTokens` 命名空间、Dynamic Type 排版、ripgrep 门禁、共享 SoT 代码生成 |
+| [ruanzhu-copyright](skills/ruanzhu-copyright/) | 准备中国大陆**软件著作权（软著）**鉴别材料 — 程序/文档鉴别材料、运行截图与名称说明补正、脱敏、Word/PDF 导出 |
+| [ios-app-store-submission](skills/ios-app-store-submission/) | 把 iOS 应用从「代码就绪」推进到「已提交 App Store 审核」：无头构建上传、TestFlight 访问、审核材料、就绪度门禁、驳回处理、按版本台账 |
 
-它们可以组合：先用 **harness-first** 启动项目，harness 跑稳后，用 **skill-authoring**
-把重复工作流固化为技能。需要让内容对 AI 搜索也可读（而不只是对人）时，用
-**geo-article-generator**。需要把 PRD/计划变成多任务 CLI 流水线（而不是一次 agent
-啃完）时，用 **ai-dev-pipeline**。需要按运维习惯整站走查并统一后台 UX 时，用
-**admin-console-ux**。需要把既有 H5/移动端代码库的配色样式收敛到单一 token 源并加
-lint 门禁时，用 **h5-style-unify**。SwiftUI 应用做同样的统一时用
-**swiftui-style-unify**；同一产品两端并存时，两个技能在共享 web SoT 处组合。交付物
-是软著登记材料（不是 code review、许可证或商标）时，用 **ruanzhu-copyright**。
-只要 App 需要走到、扛过或重试 App Review，就用 **ios-app-store-submission**——
-哪怕只做其中一个切片（重传 build、TestFlight 邀请丢失、截图核查），因为每个
-切片共享同一套事实表、安全门禁与台账规则。
+这些技能可以组合使用。新项目用 **harness-first** 开工，等 harness 跑稳了，再用
+**skill-authoring** 把重复的工作流固化成技能。内容不仅要给人看，还要让 AI 搜索
+读懂并引用的，交给 **geo-article-generator**；PRD 或计划适合拆成多任务 CLI
+流水线、而不是让 agent 一口啃完的，走 **ai-dev-pipeline**。后台要按运维习惯做
+整站走查，找 **admin-console-ux**；既有 H5/移动端代码库要把配色样式收敛到单一
+token 源并加 lint 门禁，用 **h5-style-unify**，SwiftUI 应用同理用
+**swiftui-style-unify**，同一产品两端并存时两个技能在共享 web SoT 处衔接。
+交付物是软著登记材料（不是 code review、许可证或商标）就交给
+**ruanzhu-copyright**。App 要提审、扛审或驳回复审，哪怕只用其中一个环节
+（重传 build、找回 TestFlight 邀请、截图核查），都建议用
+**ios-app-store-submission**，因为这些环节共享同一套事实表、安全门禁与台账规则。
 
 ## 安装
 

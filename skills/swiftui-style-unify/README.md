@@ -2,19 +2,19 @@
 
 [中文](README.zh-CN.md)
 
-A portable Agent Skill. It unifies style, color, and design for an **existing** SwiftUI /
-iOS app — converging inline colors, fonts, and magic numbers into one token namespace with
-Dynamic Type-aware typography, wrapping components around semantic props, and locking it
-with a fail-closed ripgrep gate. It is the SwiftUI sibling of
+Unifies style, color, and design for an **existing** SwiftUI / iOS app: inline
+colors, fonts, and magic numbers converge into one token namespace with
+Dynamic Type-aware typography, components get wrapped around semantic props, and
+a fail-closed ripgrep gate locks the result. It is the SwiftUI sibling of
 [h5-style-unify](../h5-style-unify/); the two compose at a shared web SoT.
 
-**Evidence, stated honestly:** one production SwiftUI case (token layer, theme, components,
+**Evidence from real projects:** one production SwiftUI case (token layer, theme, components,
 lint, codegen, docs), cross-checked against community SwiftUI design-system practice.
 Where the community agrees, the skill says so; where it differs (runtime-theme engines,
 Style Dictionary, SwiftLint), it presents the decision. Adoption counts live only in
 `references/gate-and-pitfalls.md`.
 
-Portable names: `DesignTokens`, `TextStyle` / `.textStyle(_:)`, `AppTheme`, `AppBadge` —
+Names are fixed: `DesignTokens`, `TextStyle` / `.textStyle(_:)`, `AppTheme`, `AppBadge` —
 no client brand prefix.
 
 ## Install order (not ring-number order)

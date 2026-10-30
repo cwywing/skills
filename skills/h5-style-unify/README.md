@@ -2,12 +2,12 @@
 
 [中文](README.zh-CN.md)
 
-A portable Agent Skill. It unifies style, color, and visual design for an **existing**
-H5 / mobile-web project — converging scattered hard-coded colors into one token source of
-truth, wrapping components around semantics, and enforcing it with a machine gate —
-without a big-bang rewrite.
+Unifies style, color, and visual design for an **existing** H5 / mobile-web
+project: scattered hard-coded colors converge into one token source of truth,
+high-frequency visual pieces get semantic component wrappers, and a machine gate
+enforces the result. No big-bang rewrite.
 
-**Evidence, stated honestly:** one production H5 codebase (bare Vue3 WeChat-embedded app)
+**Evidence from real projects:** one production H5 codebase (bare Vue3 WeChat-embedded app)
 proved theme.css + stylelint + the rgba/inline-style/customSyntax pitfalls. A sibling
 SwiftUI app sharing that H5 SoT proved the five-ring **order** and codegen; Swift details
 live in [swiftui-style-unify](../swiftui-style-unify/). Do not read this as two independent

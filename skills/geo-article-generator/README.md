@@ -7,12 +7,12 @@ raw research) into a publishable article that generative AI engines — ChatGPT,
 Gemini, 豆包, Perplexity, AI search overviews — can correctly identify,
 understand, and cite.
 
-**This skill optimizes for structured retrieval, not a specific article
-format.** Articles are assemblies of verifiable **Retrieval Units** under a
+This skill optimizes for structured retrieval, not a specific article format.
+Articles are assemblies of verifiable **Retrieval Units** under a
 Genre chosen by Search Intent → Information Need — not "always Listicle," not
 keyword SEO.
 
-## What it gives you
+## What you get
 
 - Workflow: **Intent + Information Need** → Evidence → Question Coverage →
   **Genre Selection** → Generate (Retrieval Units) → Self-check & Deliver.

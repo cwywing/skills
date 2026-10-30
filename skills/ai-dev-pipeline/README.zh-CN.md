@@ -37,7 +37,7 @@ python .pipeline/scripts/run_pipeline.py --plan .pipeline/plans/your-plan.md
 python .pipeline/scripts/run_pipeline.py --plan .pipeline/plans/your-plan.md --dry-run
 ```
 
-在 Cursor 对话中也可直接说：「按 `.pipeline/plans/xxx.md` 跑 AI 开发流水线」——会加载本 Skill。
+在 Cursor 对话里也可以直接说「按 `.pipeline/plans/xxx.md` 跑 AI 开发流水线」，会加载本 Skill。
 
 ## 默认阶段
 
